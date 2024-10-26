@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "650716812885",
+    "project_id": "readally-project",
+    "storage_bucket": "readally-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650716812885:android:a378212a8a276d0fdaa6dc",
+        "android_client_info": {
+          "package_name": "com.example.readally"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7M0NKHCHsS7iJraUHyZFlHspn_t-DuOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
