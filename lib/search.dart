@@ -150,7 +150,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               Text(
                                 book['title'],
                                 style: const TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xff001910), // Text color for title
                                 ),
