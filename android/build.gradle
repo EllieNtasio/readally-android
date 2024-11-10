@@ -1,11 +1,11 @@
-// android/build.gradle
-
 buildscript {
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
+        // Ensure the latest version is used for the Android Gradle Plugin
+        classpath 'com.android.tools.build:gradle:8.0.0' // or the latest stable version
         // Firebase Google Services classpath
         classpath 'com.google.gms:google-services:4.3.15'
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:readally/bookspage.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -9,24 +9,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _isTicked = true;
-  @override
-  void initState() {
-    super.initState();
-    _loadSettings();
-  }
-
-  Future<void> _loadSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _isTicked = prefs.getBool('isTicked') ?? true;
-    });
-  }
-
-  Future<void> _saveSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isTicked', _isTicked);
-  }
+  bool _isTicked = true; // Checkbox state
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Image.asset(
-                'assets/images/circles.png',
+                'assets/images/circles.png', // Ensure the image path is correct
                 width: 500,
                 height: 500,
               ),
@@ -76,18 +59,17 @@ class _SignUpPageState extends State<SignUpPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 70),
+                  // Username input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Color(0xFFC7D9B5)),
+                          borderSide: const BorderSide(color: Color(0xFFC7D9B5)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Color(0xff385723)),
+                          borderSide: const BorderSide(color: Color(0xff385723)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Username',
@@ -97,18 +79,17 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  // Email input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Color(0xFFC7D9B5)),
+                          borderSide: const BorderSide(color: Color(0xFFC7D9B5)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Color(0xff385723)),
+                          borderSide: const BorderSide(color: Color(0xff385723)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Email',
@@ -118,18 +99,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  // Password input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
+                      obscureText: true, // Obscure text for password input
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Color(0xFFC7D9B5)),
+                          borderSide: const BorderSide(color: Color(0xFFC7D9B5)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Color(0xff385723)),
+                          borderSide: const BorderSide(color: Color(0xff385723)),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Password',
@@ -139,19 +120,18 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 2),
+                  // Terms and conditions checkbox
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 19.0), // Padding 28 στα αριστερά και δεξιά
+                    padding: const EdgeInsets.symmetric(horizontal: 19.0),
                     child: Row(
                       children: [
                         Transform.scale(
-                          scale: 1.0, // Μεγαλύτερο μέγεθος για το Checkbox
+                          scale: 1.0,
                           child: Checkbox(
                             value: _isTicked,
                             onChanged: (bool? value) {
                               setState(() {
-                                _isTicked = value!;
-                                _saveSettings(); // Αποθήκευση ρυθμίσεων
+                                _isTicked = value!; // Update checkbox state
                               });
                             },
                             shape: const CircleBorder(),
@@ -168,12 +148,14 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 40),
+                  // Sign Up button
                   ElevatedButton(
                     onPressed: () {
+                      // You can add further logic here for sign up
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SignUpPage(),
+                          builder: (context) => BooksPage(), // Update to your next page
                         ),
                       );
                     },
@@ -188,7 +170,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: const Text(
                       'Sign Up!',
                       style: TextStyle(
-                        color: Color(0xFFFFFAf5),
+                        color: Color(0xFFFFFAF5),
                         fontSize: 30,
                       ),
                     ),

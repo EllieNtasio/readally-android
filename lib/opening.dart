@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:readally/components/authentication/signup.dart';
-import 'package:readally/components/authentication/signin.dart';
+import 'package:readally/authentication/signup.dart';
+import 'package:readally/authentication/signin.dart';
+
 
 class Opening extends StatelessWidget {
   const Opening({super.key});
@@ -20,9 +21,7 @@ class Opening extends StatelessWidget {
                 fontFamily: 'Inter',
                 color: Color(0xFF385723),
                 fontSize: 52.61,
-                letterSpacing: 0,
                 fontWeight: FontWeight.bold,
-                height: 1,
               ),
             ),
             const SizedBox(height: 50),
@@ -42,9 +41,6 @@ class Opening extends StatelessWidget {
                   color: Color.fromRGBO(0, 0, 0, 1),
                   fontFamily: 'Inter',
                   fontSize: 20,
-                  letterSpacing: 0,
-                  fontWeight: FontWeight.normal,
-                  height: 1.2,
                 ),
               ),
             ),
@@ -54,7 +50,7 @@ class Opening extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SignUpPage(),
+                    builder: (context) => const SignUpPage(), // Navigate to BooksPage
                   ),
                 );
               },
@@ -88,9 +84,6 @@ class Opening extends StatelessWidget {
                       color: Color.fromRGBO(0, 0, 0, 1),
                       fontFamily: 'Inter',
                       fontSize: 17.29,
-                      letterSpacing: 0,
-                      fontWeight: FontWeight.normal,
-                      height: 1.2,
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -109,9 +102,7 @@ class Opening extends StatelessWidget {
                         color: Color(0xFF385723),
                         fontFamily: 'Inter',
                         fontSize: 17.29,
-                        letterSpacing: 0,
                         fontWeight: FontWeight.bold,
-                        height: 1.2,
                       ),
                     ),
                   ),

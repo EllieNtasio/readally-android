@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:readally/homepage.dart';
+import 'package:readally/bookspage.dart';
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -129,7 +130,7 @@ class _SignInPageState extends State<SignInPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomePage(),
+                          builder: (context) =>  BooksPage(),
                         ),
                       );
                     },
