@@ -59,6 +59,24 @@ class _SignUpPageState extends State<SignUpPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 70),
+
+                  // Username Label
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter a username:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xff001910),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 7),
+
                   // Username input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -73,12 +91,31 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Username',
+                        hintStyle: const TextStyle(color: Colors.grey), // Greyish hint text
                         fillColor: const Color(0xffFFFAF5),
                         filled: true,
                       ),
                     ),
                   ),
                   const SizedBox(height: 30),
+
+                  // Email Label
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter your email:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xff001910),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 7),
+
                   // Email input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -93,12 +130,31 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Email',
+                        hintStyle: const TextStyle(color: Colors.grey), // Greyish hint text
                         fillColor: const Color(0xffFFFAF5),
                         filled: true,
                       ),
                     ),
                   ),
                   const SizedBox(height: 30),
+
+                  // Password Label
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter your password:',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xff001910),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 7),
+
                   // Password input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -114,12 +170,14 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Password',
+                        hintStyle: const TextStyle(color: Colors.grey), // Greyish hint text
                         fillColor: const Color(0xffFFFAF5),
                         filled: true,
                       ),
                     ),
                   ),
                   const SizedBox(height: 2),
+
                   // Terms and conditions checkbox
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 19.0),
@@ -148,6 +206,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 40),
+
                   // Sign Up button
                   ElevatedButton(
                     onPressed: () {
@@ -170,7 +229,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: const Text(
                       'Sign Up!',
                       style: TextStyle(
-                        color: Color(0xFFFFFAF5),
+                        color: Color(0xFFFFFAf5),
                         fontSize: 30,
                       ),
                     ),

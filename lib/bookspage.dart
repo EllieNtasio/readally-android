@@ -81,7 +81,7 @@ class BooksListSection extends StatelessWidget {
   final String filter;
   final String filterValue;
   final DatabaseService databaseService;
-  final Color backgroundColor; // Background color for each section
+  final Color backgroundColor;
 
   BooksListSection({
     required this.title,
@@ -94,8 +94,8 @@ class BooksListSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundColor, // Set the background color for the section
-      padding: const EdgeInsets.symmetric(vertical: 10.0), // Adjust vertical padding for overall section spacing
+      color: backgroundColor,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -137,11 +137,11 @@ class BooksListSection extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 12), // Space between title and book list
+          const SizedBox(height: 12),
           SizedBox(
-            height: 160, // Adjust height to control list size
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: databaseService.getBooksByFilter(filter, filterValue),
+            height: 160,
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: databaseService.getBooksStreamByFilter(filter, filterValue),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator()); // Loading indicator
@@ -182,10 +182,10 @@ class BooksListSection extends StatelessWidget {
                           );
                         },
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0), // Adjust padding for proper spacing
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Material(
                             elevation: 4.0, // Elevation to give a floating effect
-                            borderRadius: BorderRadius.circular(12.0), // Rounded corners with elevation
+                            borderRadius: BorderRadius.circular(12.0),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12.0), // Rounded corners for the book cover
                               child: Image.network(

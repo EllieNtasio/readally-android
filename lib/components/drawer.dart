@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:readally/profile.dart';
-import 'package:readally/newlist.dart';
-import 'package:readally/settings.dart';
-import 'package:readally/search.dart';
+import 'package:readally/secpages/profile.dart';
+import 'package:readally/secpages/newlist.dart';
+import 'package:readally/secpages/settings.dart';
+import 'package:readally/secpages/search.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
