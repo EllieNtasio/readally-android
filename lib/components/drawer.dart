@@ -86,7 +86,7 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.list, color: Color(0xff001910), size: 30),
               title: Text(
-                'New List',
+                'Lists',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,
@@ -95,7 +95,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NewListScreen()),
+                  MaterialPageRoute(builder: (context) => NewListPage()),
                 );
               },
             ),
@@ -133,7 +133,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsScreen()),
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
                 );
               },
             ),

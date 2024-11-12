@@ -51,7 +51,7 @@ class _SignInPageState extends State<SignInPage> {
       backgroundColor: const Color(0xffFFFAF5),
       body: Stack(
         children: [
-          // Positioned Widgets
+
           Positioned(
             bottom: -20,
             left: 120,
@@ -116,7 +116,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   const SizedBox(height: 60),
 
-                  // Email Label
+
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Align(
@@ -133,7 +133,7 @@ class _SignInPageState extends State<SignInPage> {
 
                   const SizedBox(height: 7),
 
-                  // Email TextField
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
@@ -157,7 +157,7 @@ class _SignInPageState extends State<SignInPage> {
 
                   const SizedBox(height: 30),
 
-                  // Password Label
+
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Align(
@@ -174,7 +174,7 @@ class _SignInPageState extends State<SignInPage> {
 
                   const SizedBox(height: 7),
 
-                  // Password Field with Eye Icon
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextFormField(
@@ -210,7 +210,7 @@ class _SignInPageState extends State<SignInPage> {
                   const SizedBox(height: 30),
                   const SizedBox(height: 40),
 
-                  // Sign In Button
+
                   ElevatedButton(
                     onPressed: _signIn, // Call the fake authentication function
                     style: ElevatedButton.styleFrom(
