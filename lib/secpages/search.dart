@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:readally/components/card.dart';
-import '../bookspage.dart'; // Import BooksPage for access to the lists
+import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -12,65 +10,46 @@ class _SearchScreenState extends State<SearchScreen> {
   String query = '';
   List<Map<String, dynamic>> searchResults = [];
 
-  final BooksPage booksPage = BooksPage(); // Create instance of BooksPage
-
-  // Function to search books by both title and author in Firebase
+  // Function to search books by both title and author
   void searchBooks(String query) async {
     if (query.isNotEmpty) {
-      // Perform a case-insensitive search for books by title
       final titleResults = await FirebaseFirestore.instance
           .collection('books')
           .where('title', isGreaterThanOrEqualTo: query)
-          .where('title', isLessThanOrEqualTo: query + '\uf8ff') // Search range for title
+          .where('title', isLessThanOrEqualTo: query + '\uf8ff')
           .get();
 
-      // Perform a case-insensitive search for books by author
       final authorResults = await FirebaseFirestore.instance
           .collection('books')
           .where('author', isGreaterThanOrEqualTo: query)
-          .where('author', isLessThanOrEqualTo: query + '\uf8ff') // Search range for author
+          .where('author', isLessThanOrEqualTo: query + '\uf8ff')
           .get();
 
-      // Combine title and author results while avoiding duplicates
       final combinedResults = {
         ...titleResults.docs.map((doc) => {'id': doc.id, ...doc.data()}),
         ...authorResults.docs.map((doc) => {'id': doc.id, ...doc.data()}),
       };
 
       setState(() {
-        // Update the search results
         searchResults = combinedResults.map((result) => result as Map<String, dynamic>).toList();
       });
     } else {
       setState(() {
-        searchResults = []; // Clear the search results
+        searchResults = [];
       });
     }
   }
 
-  // Function to check if the book is in any of the predefined lists
-  Future<bool> isBookInAnyList(String bookId) async {
-    // Fetch the books from each list using database service
-    List<Map<String, dynamic>> stephenKingBooks = await booksPage.databaseService.getBooksByFilter('author', 'Stephen King');
-    List<Map<String, dynamic>> academicBooks = await booksPage.databaseService.getBooksByFilter('category', 'Academic');
-    List<Map<String, dynamic>> bestSellers = await booksPage.databaseService.getBooksByFilter('category', 'Best Seller');
-
-    // Check if the book exists in any of these lists
-    bool isInList = stephenKingBooks.any((book) => book['id'] == bookId) ||
-        academicBooks.any((book) => book['id'] == bookId) ||
-        bestSellers.any((book) => book['id'] == bookId);
-
-    return isInList;
-  }
-
-  // Show a dialog to move the book to an existing list (only if the book is not already in a list)
-  void showMoveToListDialog(BuildContext context, String bookId, String bookTitle, Map<String, dynamic> bookData) {
-    // Available lists and their corresponding filters and filter values
-    List<Map<String, dynamic>> availableLists = [
-      {'name': 'Stephen King Books', 'filter': 'author', 'filterValue': 'Stephen King'},
-      {'name': 'Academic Books', 'filter': 'category', 'filterValue': 'Academic'},
-      {'name': 'Best Sellers', 'filter': 'category', 'filterValue': 'Best Seller'},
-    ];
+  // Function to show the dialog and add the book to the selected list
+  void showMoveToListDialog(BuildContext context, String bookId, String bookTitle) async {
+    // Fetch lists from Firestore
+    QuerySnapshot listsSnapshot = await FirebaseFirestore.instance.collection('lists').get();
+    List<Map<String, dynamic>> availableLists = listsSnapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        'name': doc['listname'],
+      };
+    }).toList();
 
     showDialog(
       context: context,
@@ -83,12 +62,12 @@ class _SearchScreenState extends State<SearchScreen> {
               return ListTile(
                 title: Text(listInfo['name']),
                 onTap: () async {
-                  // Update the book's filter field in the database
-                  await FirebaseFirestore.instance
-                      .collection('books')
-                      .doc(bookId) // Use the document ID to update the existing entry
-                      .update({
-                    listInfo['filter']: listInfo['filterValue'], // Update the correct filter
+                  // Reference to the selected list document
+                  DocumentReference listDoc = FirebaseFirestore.instance.collection('lists').doc(listInfo['id']);
+
+                  // Add the book's ID to the books array of the selected list
+                  await listDoc.update({
+                    'books': FieldValue.arrayUnion([bookId]),
                   });
 
                   Navigator.pop(context); // Close the dialog
@@ -101,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           actions: [
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
               },
@@ -161,92 +140,54 @@ class _SearchScreenState extends State<SearchScreen> {
               itemCount: searchResults.length,
               itemBuilder: (context, index) {
                 final book = searchResults[index];
-                return FutureBuilder<bool>(
-                  future: isBookInAnyList(book['id']),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const CircularProgressIndicator(); // Loading indicator while we check the list
-                    }
-
-                    final bool isInList = snapshot.data!;
-
-                    return GestureDetector(
-                      onTap: () async {
-                        if (isInList) {
-                          // If the book is in a list, just navigate to BookDetailPage (no move option)
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BookDetailPage(
-                                title: book['title'],
-                                coverUrl: book['cover'],
-                                summary: book['summary'],
-                                author: book['author'],
-                                rating: book['rating'].toString(),
-                              ),
-                            ),
-                          );
-                        } else {
-                          // Show a dialog to move the book to a list if it's not in any list
-                          showMoveToListDialog(context, book['id'], book['title'], book);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image.network(
-                                book['cover'],
-                                width: 70,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Icon(Icons.error);
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    book['title'],
-                                    style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff001910),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    book['author'],
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black54,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Green tick if the book is in a list
-                            if (isInList)
-                              const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              )
-                            else
-                              const Icon(
-                                Icons.add_circle_outline,
-                                color: Colors.grey,
-                              ),
-                          ],
-                        ),
-                      ),
-                    );
+                return GestureDetector(
+                  onTap: () {
+                    showMoveToListDialog(context, book['id'], book['title']);
                   },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.network(
+                            book['cover'],
+                            width: 70,
+                            height: 100,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.error);
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                book['title'],
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff001910),
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                book['author'],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(Icons.add_circle_outline, color: Colors.grey),
+                      ],
+                    ),
+                  ),
                 );
               },
             ),

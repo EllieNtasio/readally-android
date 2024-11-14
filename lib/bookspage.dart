@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:readally/components/card.dart';
-import 'database.dart';
-import 'full_books_list.dart';
-import 'package:readally/components/drawer.dart'; // Import the drawer.dart file
+import 'package:readally/database.dart'; // Ensure DatabaseService is properly imported
+import 'package:readally/components/drawer.dart';
+import 'package:readally/full_books_list.dart'; // Drawer import
+
 
 class BooksPage extends StatelessWidget {
   final DatabaseService databaseService = DatabaseService();
@@ -18,58 +19,57 @@ class BooksPage extends StatelessWidget {
         leading: Builder(
           builder: (context) {
             return IconButton(
-              icon: const Icon(Icons.menu), // Keep the menu icon
+              icon: const Icon(Icons.menu), // Menu icon
               onPressed: () {
-                Scaffold.of(context).openDrawer(); // This now works because Builder gives the correct context
+                Scaffold.of(context).openDrawer(); // Open Drawer
               },
             );
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.camera_alt), // Camera icon on the right
+            icon: const Icon(Icons.camera_alt), // Camera icon
             onPressed: () {
-              // Add functionality for camera icon here, if needed
-              print("Camera icon pressed"); // Example action
+              print("Camera icon pressed");
             },
           ),
         ],
       ),
       backgroundColor: const Color(0xffFFFAF5),
-      drawer: AppDrawer(), // Add the Drawer to the Scaffold
-      body: Column(
-        children: [
-          Flexible(
-            flex: 1,
-            child: BooksListSection(
-              title: 'Stephen King Books',
-              filter: 'author',
-              filterValue: 'Stephen King',
-              databaseService: databaseService,
-              backgroundColor: const Color(0xffFFFAF5),
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: BooksListSection(
-              title: 'Academic Books',
-              filter: 'category',
-              filterValue: 'Academic',
-              databaseService: databaseService,
-              backgroundColor: const Color(0xffFFFAF5),
-            ),
-          ),
-          Flexible(
-            flex: 1,
-            child: BooksListSection(
-              title: 'Best Sellers',
-              filter: 'category',
-              filterValue: 'Best Seller',
-              databaseService: databaseService,
-              backgroundColor: const Color(0xffFFFAF5),
-            ),
-          ),
-        ],
+      drawer: AppDrawer(), // AppDrawer widget for the drawer
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: databaseService.getListsStream(), // Fetch lists dynamically
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            final lists = snapshot.data!;
+
+            return ListView.builder(
+              itemCount: lists.length,
+              itemBuilder: (context, index) {
+                final list = lists[index];
+                final listName = list['listname'];
+                final bookRefs = list['books'];
+
+                return BooksListSection(
+                  title: listName,
+                  bookRefs: bookRefs,
+                  databaseService: databaseService,
+                  backgroundColor: const Color(0xffFFFAF5),
+                );
+              },
+            );
+          }
+
+          return const Center(child: Text('No lists found!'));
+        },
       ),
     );
   }
@@ -78,15 +78,13 @@ class BooksPage extends StatelessWidget {
 // Section for each book list (title + horizontal scrollable list of books)
 class BooksListSection extends StatelessWidget {
   final String title;
-  final String filter;
-  final String filterValue;
+  final List<dynamic> bookRefs; // Array of book references (IDs)
   final DatabaseService databaseService;
   final Color backgroundColor;
 
   BooksListSection({
     required this.title,
-    required this.filter,
-    required this.filterValue,
+    required this.bookRefs,
     required this.databaseService,
     required this.backgroundColor,
   });
@@ -101,14 +99,13 @@ class BooksListSection extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              // Navigate to full list page when the section title is tapped
+              // Navigate to BooksListPage when the section title is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BooksListPage(
                     title: title,
-                    filter: filter,
-                    filterValue: filterValue,
+                    bookRefs: bookRefs, // Pass book references
                     databaseService: databaseService,
                   ),
                 ),
@@ -140,15 +137,15 @@ class BooksListSection extends StatelessWidget {
           const SizedBox(height: 12),
           SizedBox(
             height: 160,
-            child: StreamBuilder<List<Map<String, dynamic>>>(
-              stream: databaseService.getBooksStreamByFilter(filter, filterValue),
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: databaseService.getBooksByReferences(bookRefs), // Fetch books by their references (IDs)
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator()); // Loading indicator
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}')); // Error handling
+                  return Center(child: Text('Error: ${snapshot.error}'));
                 }
 
                 if (snapshot.hasData && snapshot.data!.isNotEmpty) {
@@ -163,7 +160,7 @@ class BooksListSection extends StatelessWidget {
                       final coverUrl = book['cover'];
                       final summary = book['summ'];
                       final author = book['author'];
-                      final rate = book['rate'];
+                      final rating = book['rate'];
 
                       return GestureDetector(
                         onTap: () {
@@ -176,7 +173,7 @@ class BooksListSection extends StatelessWidget {
                                 coverUrl: coverUrl,
                                 summary: summary,
                                 author: author,
-                                rating: rate,
+                                rating: rating.toString(),
                               ),
                             ),
                           );
@@ -184,17 +181,17 @@ class BooksListSection extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Material(
-                            elevation: 4.0, // Elevation to give a floating effect
+                            elevation: 4.0,
                             borderRadius: BorderRadius.circular(12.0),
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12.0), // Rounded corners for the book cover
+                              borderRadius: BorderRadius.circular(12.0),
                               child: Image.network(
                                 coverUrl,
                                 width: 100,
-                                height: 130, // Adjust size to control cover image dimensions
+                                height: 130,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  return const Icon(Icons.error); // Error handling for the image
+                                  return const Icon(Icons.error);
                                 },
                               ),
                             ),
@@ -205,7 +202,7 @@ class BooksListSection extends StatelessWidget {
                   );
                 }
 
-                return const Center(child: Text('No books found!')); // Handle no data case
+                return const Center(child: Text('No books found!'));
               },
             ),
           ),

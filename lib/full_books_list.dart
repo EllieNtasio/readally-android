@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:readally/database.dart'; // Import the DatabaseService
 import 'package:readally/components/card.dart'; // Import BookDetailPage
-import 'database.dart'; // Import the DatabaseService
 
-class BooksListPage extends StatelessWidget {
+class BooksListPage extends StatefulWidget {
   final String title;
-  final String filter;
-  final String filterValue;
+  final List<dynamic> bookRefs; // Book references array
   final DatabaseService databaseService;
 
   BooksListPage({
     required this.title,
-    required this.filter,
-    required this.filterValue,
+    required this.bookRefs,
     required this.databaseService,
   });
 
   @override
+  State<BooksListPage> createState() => _BooksListPageState();
+}
+
+class _BooksListPageState extends State<BooksListPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         backgroundColor: const Color(0xffFFFAF5), // Background color
         foregroundColor: const Color(0xff001910), // Text color
       ),
       backgroundColor: const Color(0xffFFFAF5), // Page background
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: databaseService.getBooksByFilter(filter, filterValue), // Fetch all books for this category/author
+        future: widget.databaseService.getBooksByReferences(widget.bookRefs), // Fetch books by references
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator()); // Loading indicator
@@ -44,11 +47,11 @@ class BooksListPage extends StatelessWidget {
                 itemCount: books.length,
                 itemBuilder: (context, index) {
                   final book = books[index];
-                  final title = book['title']; // Use the correct 'title' field
-                  final coverUrl = book['cover']; // Use the correct 'cover' field
-                  final summary = book['summ']; // Use the correct 'summ' field
-                  final author = book['author']; // Get author field
-                  final rate = book['rate']; // Get rate field
+                  final title = book['title'] ?? 'Untitled'; // Use the correct 'title' field
+                  final coverUrl = book['cover'] ?? ''; // Use the correct 'cover' field
+                  final summary = book['summ'] ?? ''; // Use the correct 'summ' field
+                  final author = book['author'] ?? 'Unknown'; // Get author field
+                  final rate = book['rate'] ?? 0.0; // Get rate field
 
                   return Column(
                     children: [
@@ -58,7 +61,8 @@ class BooksListPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.0), // Rounded corners for the book cover
                           child: AspectRatio(
                             aspectRatio: 2 / 3, // Maintain aspect ratio (2:3) for book covers
-                            child: Image.network(
+                            child: coverUrl.isNotEmpty
+                                ? Image.network(
                               coverUrl,
                               width: 180, // Increased width for a larger cover image
                               height: 235, // Increased height for a larger cover image
@@ -66,7 +70,8 @@ class BooksListPage extends StatelessWidget {
                               errorBuilder: (context, error, stackTrace) {
                                 return const Icon(Icons.error); // Error handling for the image
                               },
-                            ),
+                            )
+                                : const Icon(Icons.book), // Default icon if no image is available
                           ),
                         ),
                         title: Text(
@@ -108,7 +113,6 @@ class BooksListPage extends StatelessWidget {
                         color: Color(0xff385723), // Green divider color
                         thickness: 1.5, // Thickness of the divider
                       ),
-                      // Removed the SizedBox here
                     ],
                   );
                 },
