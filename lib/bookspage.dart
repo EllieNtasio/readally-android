@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:readally/components/card.dart';
-import 'package:readally/database.dart'; // Ensure DatabaseService is properly imported
+import 'package:readally/database.dart';
 import 'package:readally/components/drawer.dart';
-import 'package:readally/full_books_list.dart'; // Drawer import
-
+import 'package:readally/full_books_list.dart';
 
 class BooksPage extends StatelessWidget {
   final DatabaseService databaseService = DatabaseService();
@@ -19,16 +18,16 @@ class BooksPage extends StatelessWidget {
         leading: Builder(
           builder: (context) {
             return IconButton(
-              icon: const Icon(Icons.menu), // Menu icon
+              icon: const Icon(Icons.menu),
               onPressed: () {
-                Scaffold.of(context).openDrawer(); // Open Drawer
+                Scaffold.of(context).openDrawer();
               },
             );
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.camera_alt), // Camera icon
+            icon: const Icon(Icons.camera_alt),
             onPressed: () {
               print("Camera icon pressed");
             },
@@ -36,9 +35,9 @@ class BooksPage extends StatelessWidget {
         ],
       ),
       backgroundColor: const Color(0xffFFFAF5),
-      drawer: AppDrawer(), // AppDrawer widget for the drawer
+      drawer: AppDrawer(),
       body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: databaseService.getListsStream(), // Fetch lists dynamically
+        stream: databaseService.getListsStream(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -75,10 +74,9 @@ class BooksPage extends StatelessWidget {
   }
 }
 
-// Section for each book list (title + horizontal scrollable list of books)
 class BooksListSection extends StatelessWidget {
   final String title;
-  final List<dynamic> bookRefs; // Array of book references (IDs)
+  final List<dynamic> bookRefs;
   final DatabaseService databaseService;
   final Color backgroundColor;
 
@@ -99,13 +97,12 @@ class BooksListSection extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              // Navigate to BooksListPage when the section title is tapped
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BooksListPage(
                     title: title,
-                    bookRefs: bookRefs, // Pass book references
+                    bookRefs: bookRefs,
                     databaseService: databaseService,
                   ),
                 ),
@@ -124,10 +121,10 @@ class BooksListSection extends StatelessWidget {
                       color: Color(0xff001910),
                     ),
                   ),
-                  const SizedBox(height: 4), // Small gap between title and line
+                  const SizedBox(height: 4),
                   Container(
-                    height: 2, // Thin green line
-                    width: 230, // Adjust the width of the line
+                    height: 2,
+                    width: 230,
                     color: const Color(0xFF385723),
                   ),
                 ],
@@ -138,7 +135,7 @@ class BooksListSection extends StatelessWidget {
           SizedBox(
             height: 160,
             child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: databaseService.getBooksByReferences(bookRefs), // Fetch books by their references (IDs)
+              future: databaseService.getBooksByReferences(bookRefs),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -164,7 +161,6 @@ class BooksListSection extends StatelessWidget {
 
                       return GestureDetector(
                         onTap: () {
-                          // Navigate to BookDetailPage when a book is tapped
                           Navigator.push(
                             context,
                             MaterialPageRoute(

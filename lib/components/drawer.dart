@@ -35,7 +35,7 @@ class AppDrawer extends StatelessWidget {
                       backgroundImage: AssetImage('assets/images/snoopy.png'),
                     ),
                   ),
-                  SizedBox(width: 16),
+                  SizedBox(width: 15),
 
                   Expanded(
                     child: Column(
@@ -43,7 +43,7 @@ class AppDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'User Name',
+                          'Ellie',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -51,7 +51,7 @@ class AppDrawer extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'user@example.com',
+                          'ellie@email.com',
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 18,

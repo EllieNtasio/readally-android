@@ -10,7 +10,6 @@ class _SearchScreenState extends State<SearchScreen> {
   String query = '';
   List<Map<String, dynamic>> searchResults = [];
 
-  // Function to search books by both title and author
   void searchBooks(String query) async {
     if (query.isNotEmpty) {
       final titleResults = await FirebaseFirestore.instance
@@ -40,9 +39,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
   }
 
-  // Function to show the dialog and add the book to the selected list
   void showMoveToListDialog(BuildContext context, String bookId, String bookTitle) async {
-    // Fetch lists from Firestore
     QuerySnapshot listsSnapshot = await FirebaseFirestore.instance.collection('lists').get();
     List<Map<String, dynamic>> availableLists = listsSnapshot.docs.map((doc) {
       return {
@@ -62,15 +59,13 @@ class _SearchScreenState extends State<SearchScreen> {
               return ListTile(
                 title: Text(listInfo['name']),
                 onTap: () async {
-                  // Reference to the selected list document
                   DocumentReference listDoc = FirebaseFirestore.instance.collection('lists').doc(listInfo['id']);
 
-                  // Add the book's ID to the books array of the selected list
                   await listDoc.update({
                     'books': FieldValue.arrayUnion([bookId]),
                   });
 
-                  Navigator.pop(context); // Close the dialog
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Moved "$bookTitle" to ${listInfo['name']}')),
                   );
@@ -82,7 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
             TextButton(
               child: const Text('Cancel'),
               onPressed: () {
-                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context);
               },
             ),
           ],

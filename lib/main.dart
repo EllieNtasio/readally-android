@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'opening.dart'; // Import the Opening widget
-import 'package:readally/bookspage.dart'; // Import the BooksPage widget
-import 'database.dart'; // Ensure this file contains your DatabaseService
+import 'package:readally/bookspage.dart';
+import 'database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: Opening(), // Set Opening screen as the home page
+      home: Opening(),
     );
   }
 }

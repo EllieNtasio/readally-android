@@ -50,7 +50,7 @@ class Opening extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SignUpPage(), // Navigate to BooksPage
+                    builder: (context) => const SignUpPage(),
                   ),
                 );
               },

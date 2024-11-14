@@ -9,13 +9,12 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text(''),
         backgroundColor: const Color(0xffFFFAF5),
       ),
       backgroundColor: const Color(0xFFFFFAf5),
       body: Stack(
         children: [
-          // First Positioned widget with an image asset
           Positioned(
             top: -40,
             left: 250,
@@ -25,8 +24,6 @@ class SettingsPage extends StatelessWidget {
               height: 300,
             ),
           ),
-
-          // Second Positioned widget with an image asset
           Positioned(
             bottom: -40,
             right: 180,
@@ -36,27 +33,30 @@ class SettingsPage extends StatelessWidget {
               height: 400,
             ),
           ),
-
-          // Main content with setting options
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 50), // Adjusted the padding to move the content higher
+              padding: const EdgeInsets.only(top: 50),
               child: Column(
-
-                mainAxisAlignment: MainAxisAlignment.start, // Aligning the content at the top
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 100),
-                  // Setting boxes with reduced space
+                  const SizedBox(height: 20),
+                  Text(
+                    'SETTINGS',
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xff001910),
+                    ),
+                  ),
+                  const SizedBox(height: 35),
                   _buildSettingOption(context, Icons.account_circle, 'Login & Security', const LoginSecurityPage()),
-                  const SizedBox(height: 50), // Reduced spacing between options
+                  const SizedBox(height: 50),
                   _buildSettingOption(context, Icons.notifications, 'Notifications', const NotificationsPage()),
                   const SizedBox(height: 50),
                   _buildSettingOption(context, Icons.ads_click, 'Interest Based-Ads', const InterestBasedAdsPage()),
                   const SizedBox(height: 50),
                   _buildSettingOption(context, Icons.access_alarm, 'Accessibility', const AccessibilityPage()),
-
                   const SizedBox(height: 60),
-
                   ElevatedButton(
                     onPressed: () {
                       print('Changes saved');
@@ -87,7 +87,6 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  // Method to create setting option boxes and navigation with floating effect and elevation
   Widget _buildSettingOption(BuildContext context, IconData icon, String title, Widget page) {
     return GestureDetector(
       onTap: () {
@@ -97,20 +96,20 @@ class SettingsPage extends StatelessWidget {
         );
       },
       child: Material(
-        elevation: 3, // Floating effect
-        borderRadius: BorderRadius.circular(13), // Rounded corners
-        shadowColor: Colors.grey.withOpacity(0.3), // Shadow color
+        elevation: 3,
+        borderRadius: BorderRadius.circular(13),
+        shadowColor: Colors.grey.withOpacity(0.3),
         child: Container(
           width: 298,
           height: 53,
           decoration: BoxDecoration(
-            color: const Color(0xFFC7D9B5), // Box color
-            borderRadius: BorderRadius.circular(13), // Rounded corners
+            color: const Color(0xFFC7D9B5),
+            borderRadius: BorderRadius.circular(13),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 24, color: const Color.fromARGB(255, 7, 6, 4)), // Icon
+              Icon(icon, size: 24, color: const Color.fromARGB(255, 7, 6, 4)),
               const SizedBox(width: 10),
               Text(
                 title,

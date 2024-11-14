@@ -9,7 +9,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _isTicked = true; // Checkbox state
+  bool _isTicked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Image.asset(
-                'assets/images/circles.png', // Ensure the image path is correct
+                'assets/images/circles.png',
                 width: 500,
                 height: 500,
               ),
@@ -59,8 +59,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 70),
-
-                  // Username Label
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Align(
@@ -74,10 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 7),
-
-                  // Username input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
@@ -91,15 +86,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Username',
-                        hintStyle: const TextStyle(color: Colors.grey), // Greyish hint text
+                        hintStyle: const TextStyle(color: Colors.grey),
                         fillColor: const Color(0xffFFFAF5),
                         filled: true,
                       ),
                     ),
                   ),
                   const SizedBox(height: 30),
-
-                  // Email Label
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Align(
@@ -113,10 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 7),
-
-                  // Email input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
@@ -130,15 +120,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Email',
-                        hintStyle: const TextStyle(color: Colors.grey), // Greyish hint text
+                        hintStyle: const TextStyle(color: Colors.grey),
                         fillColor: const Color(0xffFFFAF5),
                         filled: true,
                       ),
                     ),
                   ),
                   const SizedBox(height: 30),
-
-                  // Password Label
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Align(
@@ -152,14 +140,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 7),
-
-                  // Password input field
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      obscureText: true, // Obscure text for password input
+                      obscureText: true,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(color: Color(0xFFC7D9B5)),
@@ -170,15 +155,13 @@ class _SignUpPageState extends State<SignUpPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: 'Password',
-                        hintStyle: const TextStyle(color: Colors.grey), // Greyish hint text
+                        hintStyle: const TextStyle(color: Colors.grey),
                         fillColor: const Color(0xffFFFAF5),
                         filled: true,
                       ),
                     ),
                   ),
                   const SizedBox(height: 2),
-
-                  // Terms and conditions checkbox
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 19.0),
                     child: Row(
@@ -189,7 +172,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             value: _isTicked,
                             onChanged: (bool? value) {
                               setState(() {
-                                _isTicked = value!; // Update checkbox state
+                                _isTicked = value!;
                               });
                             },
                             shape: const CircleBorder(),
@@ -206,15 +189,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                   const SizedBox(height: 40),
-
-                  // Sign Up button
                   ElevatedButton(
                     onPressed: () {
-                      // You can add further logic here for sign up
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BooksPage(), // Update to your next page
+                          builder: (context) => BooksPage(),
                         ),
                       );
                     },

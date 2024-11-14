@@ -17,7 +17,6 @@ class _NewListPageState extends State<NewListPage> {
     _fetchListNames();
   }
 
-  // Fetching the list names dynamically from Firestore
   Future<void> _fetchListNames() async {
     try {
       var snapshot = await _firestore.collection('lists').get();
@@ -44,9 +43,8 @@ class _NewListPageState extends State<NewListPage> {
         color: const Color(0xFFFFFAF5),
         padding: const EdgeInsets.all(25.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title for the section
             Text(
               'Existing Book Lists',
               style: TextStyle(
@@ -56,7 +54,6 @@ class _NewListPageState extends State<NewListPage> {
               ),
             ),
             const SizedBox(height: 16),
-            // Displaying the list items fetched from Firestore with space between containers
             Container(
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
@@ -64,11 +61,10 @@ class _NewListPageState extends State<NewListPage> {
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start, // Align list to left
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: listNames.map((listName) {
-                  // Adding space between each list container
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0), // Add space between items
+                    padding: const EdgeInsets.only(bottom: 12.0),
                     child: _ListItem(
                       listName: listName,
                       onTap: () {
@@ -80,18 +76,17 @@ class _NewListPageState extends State<NewListPage> {
               ),
             ),
             const SizedBox(height: 30),
-            // Actions at the bottom, centered
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end, // Push actions to the bottom
-                crossAxisAlignment: CrossAxisAlignment.center, // Center them horizontally
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
                     onTap: () {
                       _showCreateListDialog(context);
                     },
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center, // Center horizontally
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.add_circle_outline,
@@ -116,7 +111,7 @@ class _NewListPageState extends State<NewListPage> {
                       _showDeleteListDialog(context);
                     },
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center, // Center horizontally
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.delete_outline,
@@ -144,7 +139,6 @@ class _NewListPageState extends State<NewListPage> {
     );
   }
 
-  // Show a dialog to create a new list
   void _showCreateListDialog(BuildContext context) {
     final TextEditingController _controller = TextEditingController();
 
@@ -156,7 +150,7 @@ class _NewListPageState extends State<NewListPage> {
           title: const Text(
             'Create a List',
             style: TextStyle(
-              color: Color(0xff001910),
+              color: Color(0xFF385723),
             ),
           ),
           content: TextField(
@@ -206,7 +200,6 @@ class _NewListPageState extends State<NewListPage> {
     );
   }
 
-  // Adding new list to Firestore
   Future<void> _addNewListToFirestore(String listName) async {
     try {
       await _firestore.collection('lists').add({
@@ -215,13 +208,12 @@ class _NewListPageState extends State<NewListPage> {
         'createdAt': Timestamp.now(),
       });
       print('New list created: $listName');
-      _fetchListNames(); // Refresh the list of names after adding
+      _fetchListNames();
     } catch (e) {
       print('Error creating list: $e');
     }
   }
 
-  // Show a dialog to delete a list
   void _showDeleteListDialog(BuildContext context) {
     final TextEditingController _controller = TextEditingController();
 
@@ -288,7 +280,6 @@ class _NewListPageState extends State<NewListPage> {
     );
   }
 
-  // Delete the selected list from Firestore
   Future<void> _deleteListFromFirestore(String listName) async {
     try {
       var snapshot = await _firestore
@@ -299,7 +290,7 @@ class _NewListPageState extends State<NewListPage> {
       if (snapshot.docs.isNotEmpty) {
         await snapshot.docs.first.reference.delete();
         print('List deleted: $listName');
-        _fetchListNames(); // Refresh list after deletion
+        _fetchListNames();
       } else {
         print('No list found with the name: $listName');
       }
@@ -309,7 +300,6 @@ class _NewListPageState extends State<NewListPage> {
   }
 }
 
-// Widget to display individual list item (only name)
 class _ListItem extends StatelessWidget {
   final String listName;
   final VoidCallback onTap;
@@ -324,7 +314,7 @@ class _ListItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 300, // Set a fixed width for the containers
+        width: 300,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
         decoration: BoxDecoration(
           color: Colors.green.shade200,

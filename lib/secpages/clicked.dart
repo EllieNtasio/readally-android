@@ -18,7 +18,7 @@ class _LoginSecurityPageState extends State<LoginSecurityPage> {
   @override
   void initState() {
     super.initState();
-    // Removed shared preferences loading logic
+
   }
 
   @override
@@ -552,7 +552,7 @@ class _InterestBasedAdsPageState extends State<InterestBasedAdsPage> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      // Add URL in the future
+
                       print('Learn More tapped');
                     },
                   children: const <TextSpan>[
