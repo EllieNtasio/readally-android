@@ -107,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
                   children: [
-                    const Icon(Icons.search, color: Colors.green),
+                    const Icon(Icons.search, color: Color(0xff385723)),
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(

@@ -74,6 +74,7 @@ flutter:
     - assets/images/circles.png
     - assets/images/bb.png
     - assets/images/snoopy.png
+    - assets/images/gg.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

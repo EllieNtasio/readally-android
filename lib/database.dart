@@ -3,32 +3,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // Fetch all books (real-time stream)
-  Stream<List<Map<String, dynamic>>> getBooksStream() {
-    return _db.collection('books').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-    });
-  }
+  // Fetch books based on references (from the 'books' field in the 'lists' collection)
+  Future<List<Map<String, dynamic>>> getBooksByReferences(List<dynamic> bookIds) async {
+    List<Map<String, dynamic>> books = [];
 
-  // Fetch books by a filter ('author' or 'category') in real-time
-  Stream<List<Map<String, dynamic>>> getBooksStreamByFilter(String filter, String value) {
-    Query query = _db.collection('books');
-
-    if (filter == 'author') {
-      query = query.where('author', isEqualTo: value);
-    } else if (filter == 'category') {
-      query = query.where('category', isEqualTo: value);
+    // Iterate through each book ID in the list and fetch its data
+    for (var bookId in bookIds) {
+      try {
+        DocumentSnapshot bookDoc = await _db.collection('books').doc(bookId).get();
+        if (bookDoc.exists) {
+          books.add(bookDoc.data() as Map<String, dynamic>);
+        }
+      } catch (e) {
+        print('Error fetching book with ID $bookId: $e');
+      }
     }
 
-    return query.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-    });
-  }
-
-  // Fetch books once by a filter (e.g., 'author' or 'category')
-  Future<List<Map<String, dynamic>>> getBooksByFilter(String filter, String value) async {
-    QuerySnapshot query = await _db.collection('books').where(filter, isEqualTo: value).get();
-    return query.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    return books;  // Return the list of books
   }
 
   // Fetch list names dynamically from the 'lists' collection in real-time
@@ -43,45 +34,22 @@ class DatabaseService {
     });
   }
 
-  // Fetch books based on references (from the 'books' field in the 'lists' collection)
-  Future<List<Map<String, dynamic>>> getBooksByReferences(List<dynamic> bookIds) async {
-    List<Map<String, dynamic>> books = [];
-    for (var bookId in bookIds) {
-      // Fetch the book document using the book ID (convert ID to a reference)
-      DocumentSnapshot bookDoc = await _db.collection('books').doc(bookId).get();
-      if (bookDoc.exists) {
-        books.add(bookDoc.data() as Map<String, dynamic>);
-      }
-    }
-    return books;
-  }
-
+  // Fetch list by ID (if needed in future operations)
   Future<DocumentSnapshot> getListById(String listId) async {
     return await _db.collection('lists').doc(listId).get();
   }
 
-  Future<void> updateList(String listId, Map<String, dynamic> data) async {
-    return await _db.collection('lists').doc(listId).update(data);
-  }
-
-  // Fetch list names and books dynamically (previous method)
-  Stream<List<Map<String, dynamic>>> getListNamesAndBooks() {
-    return _db.collection('lists').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        return {
-          'listname': doc['listname'],  // List name field
-          'books': doc['books'] ?? [],  // Books is an array, default to empty if null
-        };
-      }).toList();
-    });
-  }
-
   // Method to remove a book from a list
-  Future<void> removeBookFromList(String bookId, String listId) async {
+  Future<void> removeBookFromList(String bookId, String listName) async {
     try {
-      await _db.collection('lists').doc(listId).update({
-        'books': FieldValue.arrayRemove([bookId]),
+      // Get the reference to the specific list document by list name
+      final listDocRef = _db.collection('lists').doc(listName);
+
+      // Perform the update operation: remove the bookId from the 'books' array in the 'lists' collection
+      await listDocRef.update({
+        'books': FieldValue.arrayRemove([bookId]), // Removes bookId from the 'books' array
       });
+      print('Book removed from list $listName');
     } catch (e) {
       print('Error removing book from list: $e');
     }
@@ -97,8 +65,57 @@ class DatabaseService {
       await _db.collection('lists').doc(targetListId).update({
         'books': FieldValue.arrayUnion([bookId]),
       });
+      print('Book moved from $currentListId to $targetListId');
     } catch (e) {
       print('Error moving book: $e');
+    }
+  }
+
+  // Method to update the rating of a book as a String
+  Future<void> updateBookRating(String bookId, String newRating) async {
+    try {
+      await _db.collection('books').doc(bookId).update({
+        'rate': newRating,  // Store the rating as a String
+      });
+      print('Book rating updated');
+    } catch (e) {
+      print('Error updating book rating: $e');
+    }
+  }
+
+  // Method to get a book by ID
+  Future<Map<String, dynamic>?> getBookById(String bookId) async {
+    try {
+      DocumentSnapshot bookDoc = await _db.collection('books').doc(bookId).get();
+      if (bookDoc.exists) {
+        return bookDoc.data() as Map<String, dynamic>;
+      } else {
+        return null; // Book not found
+      }
+    } catch (e) {
+      print('Error fetching book by ID: $e');
+      return null;
+    }
+  }
+
+  // Method to delete a book only from the lists, not from the 'books' collection
+  Future<void> removeBookFromAllLists(String bookId) async {
+    try {
+      // 1. Get all lists where the book is referenced
+      var listsSnapshot = await _db.collection('lists').get();
+
+      for (var listDoc in listsSnapshot.docs) {
+        String listId = listDoc.id;
+        List<dynamic> bookRefs = List.from(listDoc['books'] ?? []);
+
+        // 2. If the book exists in the list, remove it from the list's 'books' array
+        if (bookRefs.contains(bookId)) {
+          await removeBookFromList(bookId, listId);
+        }
+      }
+      print('Book removed from all lists');
+    } catch (e) {
+      print('Error removing book from all lists: $e');
     }
   }
 }

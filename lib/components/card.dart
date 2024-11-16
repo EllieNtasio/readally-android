@@ -23,22 +23,7 @@ class BookDetailPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color(0xffFFFAF5),
         title: Text(''),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => Container(
-                  height: 200,
-                  child: Center(
-                    child: Text('More options'),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+
       ),
       backgroundColor: Color(0xffFFFAF5),
       body: Stack(

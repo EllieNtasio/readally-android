@@ -90,7 +90,7 @@ class _NewListPageState extends State<NewListPage> {
                       children: [
                         Icon(
                           Icons.add_circle_outline,
-                          color: Colors.green,
+                          color: Color(0xff385723),
                           size: 30,
                         ),
                         const SizedBox(width: 10),
@@ -98,7 +98,7 @@ class _NewListPageState extends State<NewListPage> {
                           'Create a New List',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.green,
+                            color: Color(0xff385723),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -115,7 +115,7 @@ class _NewListPageState extends State<NewListPage> {
                       children: [
                         Icon(
                           Icons.delete_outline,
-                          color: Colors.red,
+                          color: Color(0xff8b0000),
                           size: 30,
                         ),
                         const SizedBox(width: 10),
@@ -123,7 +123,7 @@ class _NewListPageState extends State<NewListPage> {
                           'Delete a List',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.red,
+                            color: Color(0xff8b0000),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -270,7 +270,7 @@ class _NewListPageState extends State<NewListPage> {
               child: const Text(
                 'Delete',
                 style: TextStyle(
-                  color: Colors.red,
+                  color: Color(0xff8b0000),
                 ),
               ),
             ),
@@ -317,7 +317,7 @@ class _ListItem extends StatelessWidget {
         width: 300,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
         decoration: BoxDecoration(
-          color: Colors.green.shade200,
+          color: Color(0xff94AB71),
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Text(
