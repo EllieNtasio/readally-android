@@ -4,6 +4,11 @@ import 'package:readally/database.dart';
 import 'package:readally/components/drawer.dart';
 import 'package:readally/full_books_list.dart';
 
+import 'package:flutter/material.dart';
+import 'package:readally/database.dart';
+import 'package:readally/components/drawer.dart';
+import 'package:readally/full_books_list.dart';
+
 class BooksPage extends StatelessWidget {
   final DatabaseService databaseService = DatabaseService();
 
@@ -25,14 +30,6 @@ class BooksPage extends StatelessWidget {
             );
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.camera_alt),
-            onPressed: () {
-              print("Camera icon pressed");
-            },
-          ),
-        ],
       ),
       backgroundColor: const Color(0xffFFFAF5),
       drawer: AppDrawer(),
@@ -73,6 +70,7 @@ class BooksPage extends StatelessWidget {
     );
   }
 }
+
 
 class BooksListSection extends StatelessWidget {
   final String title;

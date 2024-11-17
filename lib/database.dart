@@ -4,86 +4,54 @@ class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Fetch books based on references (from the 'books' field in the 'lists' collection)
-  Future<List<Map<String, dynamic>>> getBooksByReferences(List<dynamic> bookIds) async {
-    List<Map<String, dynamic>> books = [];
+  Future<List<Map<String, dynamic>>> getBooksByReferences(List<dynamic> bookRefs) async {
+    final booksRef = FirebaseFirestore.instance.collection('books');
+    List<Map<String, dynamic>> booksList = [];
 
-    // Iterate through each book ID in the list and fetch its data
-    for (var bookId in bookIds) {
-      try {
-        DocumentSnapshot bookDoc = await _db.collection('books').doc(bookId).get();
-        if (bookDoc.exists) {
-          books.add(bookDoc.data() as Map<String, dynamic>);
+    // Loop through each bookRef ID and fetch its details
+    for (var ref in bookRefs) {
+      var doc = await booksRef.doc(ref).get();  // Get each book by its ID
+
+      if (doc.exists) {
+        var data = doc.data();
+        if (data != null) {
+          data['id'] = doc.id;  // Add the document ID to the book data
+          booksList.add(data);
         }
-      } catch (e) {
-        print('Error fetching book with ID $bookId: $e');
       }
     }
 
-    return books;  // Return the list of books
+    return booksList;
   }
 
-  // Fetch list names dynamically from the 'lists' collection in real-time
+  // Stream to fetch lists in real-time from 'lists' collection
   Stream<List<Map<String, dynamic>>> getListsStream() {
     return _db.collection('lists').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         return {
-          'listname': doc['listname'],  // List name
-          'books': doc['books'] ?? [],  // Array of book IDs (strings)
+          'listname': doc['listname'],  // The name of the list
+          'books': doc['books'] ?? [],  // List of book IDs (array of strings)
         };
       }).toList();
     });
   }
 
-  // Fetch list by ID (if needed in future operations)
-  Future<DocumentSnapshot> getListById(String listId) async {
-    return await _db.collection('lists').doc(listId).get();
-  }
-
-  // Method to remove a book from a list
-  Future<void> removeBookFromList(String bookId, String listName) async {
+  // Fetch list details by ID
+  Future<Map<String, dynamic>> getListDetails(String listId) async {
     try {
-      // Get the reference to the specific list document by list name
-      final listDocRef = _db.collection('lists').doc(listName);
-
-      // Perform the update operation: remove the bookId from the 'books' array in the 'lists' collection
-      await listDocRef.update({
-        'books': FieldValue.arrayRemove([bookId]), // Removes bookId from the 'books' array
-      });
-      print('Book removed from list $listName');
+      DocumentSnapshot snapshot = await _db.collection('lists').doc(listId).get();
+      if (snapshot.exists) {
+        return snapshot.data() as Map<String, dynamic>;
+      } else {
+        throw Exception("List not found!");
+      }
     } catch (e) {
-      print('Error removing book from list: $e');
+      print('Error getting list details: $e');
+      throw e;
     }
   }
 
-  // Method to move a book to another list
-  Future<void> moveBookToAnotherList(String bookId, String currentListId, String targetListId) async {
-    try {
-      // 1. Remove book from the current list
-      await removeBookFromList(bookId, currentListId);
-
-      // 2. Add book to the target list
-      await _db.collection('lists').doc(targetListId).update({
-        'books': FieldValue.arrayUnion([bookId]),
-      });
-      print('Book moved from $currentListId to $targetListId');
-    } catch (e) {
-      print('Error moving book: $e');
-    }
-  }
-
-  // Method to update the rating of a book as a String
-  Future<void> updateBookRating(String bookId, String newRating) async {
-    try {
-      await _db.collection('books').doc(bookId).update({
-        'rate': newRating,  // Store the rating as a String
-      });
-      print('Book rating updated');
-    } catch (e) {
-      print('Error updating book rating: $e');
-    }
-  }
-
-  // Method to get a book by ID
+  // Fetch a single book by its ID
   Future<Map<String, dynamic>?> getBookById(String bookId) async {
     try {
       DocumentSnapshot bookDoc = await _db.collection('books').doc(bookId).get();
@@ -98,24 +66,81 @@ class DatabaseService {
     }
   }
 
-  // Method to delete a book only from the lists, not from the 'books' collection
-  Future<void> removeBookFromAllLists(String bookId) async {
+  // Update book rating (as a String) in 'books' collection
+  Future<void> updateBookRating(String bookId, String newRating) async {
     try {
-      // 1. Get all lists where the book is referenced
-      var listsSnapshot = await _db.collection('lists').get();
-
-      for (var listDoc in listsSnapshot.docs) {
-        String listId = listDoc.id;
-        List<dynamic> bookRefs = List.from(listDoc['books'] ?? []);
-
-        // 2. If the book exists in the list, remove it from the list's 'books' array
-        if (bookRefs.contains(bookId)) {
-          await removeBookFromList(bookId, listId);
-        }
-      }
-      print('Book removed from all lists');
+      await _db.collection('books').doc(bookId).update({
+        'rate': newRating,  // Store the rating as a String
+      });
+      print('Book rating updated');
     } catch (e) {
-      print('Error removing book from all lists: $e');
+      print('Error updating book rating: $e');
+    }
+  }
+
+  // Remove book from the list by listname and bookId
+  Future<void> removeBookFromList(String listname, String bookId) async {
+    print('Attempting to remove bookId: $bookId from list: $listname');
+
+    try {
+      // Query for the document where the listname field matches the provided listname
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('lists')
+          .where('listname', isEqualTo: listname)
+          .limit(1)
+          .get();
+
+      // Check if any document was found
+      if (querySnapshot.docs.isEmpty) {
+        print('Error: No list document found with the name "$listname"');
+        throw Exception('List document does not exist');
+      }
+
+      // Get the first document (since we limited the query to 1 result)
+      final docRef = querySnapshot.docs.first.reference;
+
+      // Attempt to remove the bookId from the 'books' array in the list document
+      await docRef.update({
+        'books': FieldValue.arrayRemove([bookId]),
+      });
+
+      // After update, check the new array of books to verify the removal
+      final updatedDoc = await docRef.get();
+      final updatedBooks = updatedDoc.data()?['books'];
+      print('Updated books array: $updatedBooks');
+
+      // If the book ID is still in the array, log an error
+      if (updatedBooks != null && updatedBooks.contains(bookId)) {
+        print('Error: bookId still in the array after removal');
+      } else {
+        print('Successfully removed bookId: $bookId from the list');
+      }
+    } catch (e) {
+      print('Error while removing book from Firestore: $e');
+      rethrow; // Re-throw the error so it can be caught in the calling function
+    }
+  }
+
+  // Update the book list (update the list of book references)
+  Future<void> updateBookList(String listId, List<dynamic> updatedBookRefs) async {
+    try {
+      // Update the 'books' field in the list document with the new array
+      await _db.collection('lists').doc(listId).update({
+        'books': updatedBookRefs,
+      });
+      print('Book list updated for $listId');
+    } catch (e) {
+      print('Error updating book list: $e');
+    }
+  }
+
+  // Delete a book from the 'books' collection (optional functionality)
+  Future<void> deleteBookFromCollection(String bookId) async {
+    try {
+      await _db.collection('books').doc(bookId).delete();
+      print('Book deleted from collection');
+    } catch (e) {
+      print('Error deleting book from collection: $e');
     }
   }
 }

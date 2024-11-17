@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:readally/database.dart';
-import 'package:readally/components/card.dart';
 
 class BooksListPage extends StatefulWidget {
   final String title;
-  final List<dynamic> bookRefs;
+  final List<dynamic> bookRefs;  // This is an array of book IDs
   final DatabaseService databaseService;
 
   BooksListPage({
@@ -18,6 +17,14 @@ class BooksListPage extends StatefulWidget {
 }
 
 class _BooksListPageState extends State<BooksListPage> {
+  List<dynamic> _currentBookRefs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentBookRefs = List.from(widget.bookRefs); // Make a copy of the bookRefs
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,14 +35,15 @@ class _BooksListPageState extends State<BooksListPage> {
       ),
       backgroundColor: const Color(0xffFFFAF5),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: widget.databaseService.getBooksByReferences(widget.bookRefs),
+        future: widget.databaseService.getBooksByReferences(_currentBookRefs),
+        // Fetch books by their IDs
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}')); // Error handling
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
 
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
@@ -47,71 +55,51 @@ class _BooksListPageState extends State<BooksListPage> {
                 itemCount: books.length,
                 itemBuilder: (context, index) {
                   final book = books[index];
-                  final title = book['title'] ?? 'Untitled';
+                  final title = book['title'] ?? 'No Title';
                   final coverUrl = book['cover'] ?? '';
-                  final summary = book['summ'] ?? '';
-                  final author = book['author'] ?? 'Unknown';
-                  final rate = book['rate'] ?? 0.0;
+                  final bookId = book['id']; // Assuming each book document has an 'id'
+
+                  if (bookId == null) {
+                    return const ListTile(
+                      title: Text('Invalid book entry (missing ID)'),
+                    );
+                  }
 
                   return Column(
                     children: [
                       ListTile(
                         contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: AspectRatio(
-                            aspectRatio: 2 / 3, // Maintain aspect ratio (2:3) for book covers
-                            child: coverUrl.isNotEmpty
-                                ? Image.network(
-                              coverUrl,
-                              width: 180,
-                              height: 235,
-                              fit: BoxFit.cover, // Ensure the cover image fits properly
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.error);
-                              },
-                            )
-                                : const Icon(Icons.book),
-                          ),
-                        ),
+                        leading: coverUrl.isNotEmpty
+                            ? Image.network(
+                          coverUrl,
+                          width: 50,
+                          height: 70,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.error);
+                          },
+                        )
+                            : const Icon(Icons.book),
                         title: Text(
                           title,
                           style: TextStyle(
-                            fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xff001910),
+                            fontSize: 16,
+                            color: Colors.black87,
                           ),
                         ),
-                        subtitle: Text(
-                          author,
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: const Color(0xff385723),
-                          ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete, color: Color(0xff8b0000)),
+                          onPressed: () {
+                            _removeBookFromList(bookId); // Pass the bookId to remove it
+                          },
                         ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: const Color(0xff385723),
-                        ),
-                        onTap: () {
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BookDetailPage(
-                                title: title,
-                                coverUrl: coverUrl,
-                                summary: summary,
-                                author: author,
-                                rating: rate,
-                              ),
-                            ),
-                          );
-                        },
                       ),
-                      const Divider(
+                      // Divider with green color to separate books
+                      Divider(
                         color: Color(0xff385723),
                         thickness: 1.5,
+                        indent: 10,
+                        endIndent: 10,
                       ),
                     ],
                   );
@@ -124,5 +112,32 @@ class _BooksListPageState extends State<BooksListPage> {
         },
       ),
     );
+  }
+
+  void _removeBookFromList(String bookId) async {
+    if (bookId.isEmpty) {
+      print('Error: bookId is empty');
+      return;
+    }
+
+    try {
+      // Attempt to remove the book ID from Firestore
+      await widget.databaseService.removeBookFromList(widget.title, bookId);
+
+      // Update the local list by removing the book ID
+      setState(() {
+        _currentBookRefs.remove(bookId);
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Book removed from the list.')),
+      );
+    } catch (e) {
+      print('Error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(
+            'Failed to remove the book. The list may not exist. Please try again later.')),
+      );
+    }
   }
 }
