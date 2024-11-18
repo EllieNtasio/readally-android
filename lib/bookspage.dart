@@ -4,11 +4,6 @@ import 'package:readally/database.dart';
 import 'package:readally/components/drawer.dart';
 import 'package:readally/full_books_list.dart';
 
-import 'package:flutter/material.dart';
-import 'package:readally/database.dart';
-import 'package:readally/components/drawer.dart';
-import 'package:readally/full_books_list.dart';
-
 class BooksPage extends StatelessWidget {
   final DatabaseService databaseService = DatabaseService();
 
@@ -30,47 +25,104 @@ class BooksPage extends StatelessWidget {
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.camera_alt),
+            onPressed: () {
+              // Add functionality for the camera icon here
+              print('Camera icon pressed');
+            },
+          ),
+        ],
       ),
       backgroundColor: const Color(0xffFFFAF5),
       drawer: AppDrawer(),
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: databaseService.getListsStream(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFFC7D9B5),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Welcome back, Ellie!',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xffF385723),
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Ready to explore more books?',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xffF385723),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Image.asset(
+                    'assets/images/flowers.png',
+                    width: 90,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: databaseService.getListsStream(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            final lists = snapshot.data!;
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  final lists = snapshot.data!;
 
-            return ListView.builder(
-              itemCount: lists.length,
-              itemBuilder: (context, index) {
-                final list = lists[index];
-                final listName = list['listname'];
-                final bookRefs = list['books'];
+                  return ListView.builder(
+                    itemCount: lists.length,
+                    itemBuilder: (context, index) {
+                      final list = lists[index];
+                      final listName = list['listname'];
+                      final bookRefs = list['books'];
 
-                return BooksListSection(
-                  title: listName,
-                  bookRefs: bookRefs,
-                  databaseService: databaseService,
-                  backgroundColor: const Color(0xffFFFAF5),
-                );
+                      return BooksListSection(
+                        title: listName,
+                        bookRefs: bookRefs,
+                        databaseService: databaseService,
+                        backgroundColor: const Color(0xffFFFAF5),
+                      );
+                    },
+                  );
+                }
+
+                return const Center(child: Text('No lists found!'));
               },
-            );
-          }
-
-          return const Center(child: Text('No lists found!'));
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
 
 class BooksListSection extends StatelessWidget {
   final String title;

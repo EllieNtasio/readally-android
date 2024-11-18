@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:readally/opening.dart';// Make sure you have cloud_firestore dependency
+import 'package:readally/opening.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -15,30 +15,26 @@ class ProfileScreen extends StatelessWidget {
         color: const Color(0xFFFFFAF5),
         child: Stack(
           children: [
-            // Positioned background image at bottom-left
             Positioned(
               bottom: -80,
               left: -120,
               child: Image.asset(
-                'assets/images/circles.png', // Replace with your image asset
+                'assets/images/circles.png',
                 width: 400,
                 height: 400,
               ),
             ),
-            // Profile content
             Container(
               padding: EdgeInsets.all(0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Profile Header Section
                   Stack(
                     alignment: Alignment.center,
                     children: [
-                      // Green background container with rounded bottom corners
                       Container(
-                        height: 200, // Adjust height as needed
-                        width: double.infinity,  // Take full width
+                        height: 200,
+                        width: double.infinity,
                         decoration: BoxDecoration(
                           color: Color(0xff94AB71),
                           borderRadius: BorderRadius.only(
@@ -48,21 +44,27 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         child: Stack(
                           children: [
-                            // Positioned image asset behind the avatar
                             Positioned(
-                              top: -10,
-                              left: 200,
+                              top: 5,
+                              left: 0,
                               child: Image.asset(
-                                'assets/images/gg.png', // Replace with your asset image
-                                width: 180,
-                                height: 200,
-                                fit: BoxFit.cover,
+                                'assets/images/flbooks.png',
+                                width: 190,
+                                height: 190,
+                              ),
+                            ),
+                            Positioned(
+                              top: 5,
+                              left: 230,
+                              child: Image.asset(
+                                'assets/images/flbooks.png',
+                                width: 190,
+                                height: 190,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      // CircleAvatar wrapped in a Container for floating effect
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -84,7 +86,6 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 25),
-                  // Name text
                   Text(
                     'Ellie',
                     style: TextStyle(
@@ -94,7 +95,6 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 5),
-                  // Email section with icon and text
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -112,22 +112,19 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),  // Added extra space between email and divider
-                  // Green horizontal line
+                  SizedBox(height: 20),
                   Divider(
-                    color: Color(0xff385723),  // Green color used in the divider
+                    color: Color(0xff385723),
                     thickness: 2,
                     indent: 40,
                     endIndent: 40,
                   ),
                   SizedBox(height: 16),
-                  // Row with icons and texts (Books, Lists, Location)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Books (Swapped with Lists)
                         FutureBuilder<int>(
                           future: _getBooksCount(),
                           builder: (context, snapshot) {
@@ -140,17 +137,16 @@ class ProfileScreen extends StatelessWidget {
                             int booksCount = snapshot.data ?? 0;
                             return Row(
                               children: [
-                                Icon(Icons.book, color: Color(0xff385723)), // Same green color as divider
+                                Icon(Icons.book, color: Color(0xff385723)),
                                 SizedBox(width: 8),
                                 Text(
                                   'Books: $booksCount',
-                                  style: TextStyle(fontSize: 16, color: Color(0xff385723)), // Same green color
+                                  style: TextStyle(fontSize: 16, color: Color(0xff385723)),
                                 ),
                               ],
                             );
                           },
                         ),
-                        // Lists (Swapped with Books)
                         FutureBuilder<int>(
                           future: _getListsCount(),
                           builder: (context, snapshot) {
@@ -163,24 +159,23 @@ class ProfileScreen extends StatelessWidget {
                             int listsCount = snapshot.data ?? 0;
                             return Row(
                               children: [
-                                Icon(Icons.list, color: Color(0xff385723)), // Same green color as divider
+                                Icon(Icons.list, color: Color(0xff385723)),
                                 SizedBox(width: 8),
                                 Text(
                                   'Lists: $listsCount',
-                                  style: TextStyle(fontSize: 16, color: Color(0xff385723)), // Same green color
+                                  style: TextStyle(fontSize: 16, color: Color(0xff385723)),
                                 ),
                               ],
                             );
                           },
                         ),
-                        // Location
                         Row(
                           children: [
-                            Icon(Icons.location_on, color: Color(0xff385723)), // Same green color as divider
+                            Icon(Icons.location_on, color: Color(0xff385723)),
                             SizedBox(width: 8),
                             Text(
                               'Greece',
-                              style: TextStyle(fontSize: 16, color: Color(0xff385723)), // Same green color
+                              style: TextStyle(fontSize: 16, color: Color(0xff385723)),
                             ),
                           ],
                         ),
@@ -188,10 +183,9 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 40),
-                  // Bio Section with smaller width container
                   Center(
                     child: Container(
-                      width: 320, // Adjust width as needed (smaller than screen width)
+                      width: 320,
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Color(0xffEAF1E3),
@@ -228,26 +222,23 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 40),
-                  // Divider (Green line)
                   Divider(
-                    color: Color(0xff385723),  // Green color used in the divider
+                    color: Color(0xff385723),
                     thickness: 2,
                     indent: 40,
                     endIndent: 40,
                   ),
                   SizedBox(height: 40),
-                  // Button Row Section (Edit Profile and Sign Out)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Edit Profile Button
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xff385723),
                           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           shadowColor: Colors.green.shade400.withOpacity(0.5),
                           elevation: 5,
@@ -261,7 +252,6 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 20),
-                      // Sign Out Button
                       ElevatedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -273,7 +263,7 @@ class ProfileScreen extends StatelessWidget {
                           backgroundColor: Color(0xff8b0000),
                           padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           shadowColor: Colors.red.shade600.withOpacity(0.5),
                           elevation: 5,
@@ -297,13 +287,11 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  // Function to get Lists count from Firestore
   Future<int> _getListsCount() async {
     var querySnapshot = await FirebaseFirestore.instance.collection('lists').get();
     return querySnapshot.size;
   }
 
-  // Function to get Books count from Firestore
   Future<int> _getBooksCount() async {
     var querySnapshot = await FirebaseFirestore.instance.collection('books').get();
     return querySnapshot.size;

@@ -75,6 +75,10 @@ flutter:
     - assets/images/bb.png
     - assets/images/snoopy.png
     - assets/images/gg.png
+    - assets/images/bro.png
+    - assets/images/cuate.png
+    - assets/images/flbooks.png
+    - assets/images/flowers.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

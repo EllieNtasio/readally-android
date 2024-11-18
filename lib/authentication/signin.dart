@@ -47,12 +47,12 @@ class _SignInPageState extends State<SignInPage> {
       body: Stack(
         children: [
           Positioned(
-            bottom: -20,
-            left: 120,
+            bottom: -100,
+            left: 140,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Image.asset(
-                'assets/images/cuatebook.png',
+                'assets/images/bro.png',
                 width: 300,
                 height: 300,
               ),

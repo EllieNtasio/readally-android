@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:readally/components/card.dart';  // Import the BookDetailPage
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -135,9 +136,28 @@ class _SearchScreenState extends State<SearchScreen> {
               itemCount: searchResults.length,
               itemBuilder: (context, index) {
                 final book = searchResults[index];
+                final title = book['title'] ?? 'No Title';
+                final coverUrl = book['cover'] ?? '';
+                final summary = book['summ'] ?? 'No summary available';  // Summary field
+                final author = book['author'] ?? 'Unknown Author';      // Author field
+                final rating = book['rate'] ?? '0';                     // Rating field
+                final bookId = book['id'];
+
                 return GestureDetector(
                   onTap: () {
-                    showMoveToListDialog(context, book['id'], book['title']);
+                    // Navigate to BookDetailPage with all fields
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookDetailPage(
+                          title: title,
+                          coverUrl: coverUrl,
+                          summary: summary,
+                          author: author,
+                          rating: rating,
+                        ),
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -146,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: Image.network(
-                            book['cover'],
+                            coverUrl,
                             width: 70,
                             height: 100,
                             fit: BoxFit.cover,
@@ -161,7 +181,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                book['title'],
+                                title,
                                 style: const TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
@@ -170,7 +190,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                book['author'],
+                                author,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.black54,
@@ -179,7 +199,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             ],
                           ),
                         ),
-                        const Icon(Icons.add_circle_outline, color: Colors.grey),
+                        IconButton(
+                          icon: const Icon(Icons.add_circle_outline, color: Colors.grey),
+                          onPressed: () {
+                            // Show move-to-list dialog when add icon is pressed
+                            showMoveToListDialog(context, bookId, title);
+                          },
+                        ),
                       ],
                     ),
                   ),

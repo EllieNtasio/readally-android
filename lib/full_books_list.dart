@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:readally/database.dart';
+import 'package:readally/components/card.dart';  // Import your BookDetailPage
 
 class BooksListPage extends StatefulWidget {
   final String title;
-  final List<dynamic> bookRefs;  // This is an array of book IDs
+  final List<dynamic> bookRefs;
   final DatabaseService databaseService;
 
   BooksListPage({
@@ -22,7 +23,7 @@ class _BooksListPageState extends State<BooksListPage> {
   @override
   void initState() {
     super.initState();
-    _currentBookRefs = List.from(widget.bookRefs); // Make a copy of the bookRefs
+    _currentBookRefs = List.from(widget.bookRefs);
   }
 
   @override
@@ -57,7 +58,10 @@ class _BooksListPageState extends State<BooksListPage> {
                   final book = books[index];
                   final title = book['title'] ?? 'No Title';
                   final coverUrl = book['cover'] ?? '';
-                  final bookId = book['id']; // Assuming each book document has an 'id'
+                  final summary = book['summ'] ?? 'No summary available'; // Summary field
+                  final author = book['author'] ?? 'Unknown Author';      // Author field
+                  final rating = book['rate'] ?? '0';                     // Rating field
+                  final bookId = book['id'];
 
                   if (bookId == null) {
                     return const ListTile(
@@ -69,16 +73,33 @@ class _BooksListPageState extends State<BooksListPage> {
                     children: [
                       ListTile(
                         contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
-                        leading: coverUrl.isNotEmpty
-                            ? Image.network(
-                          coverUrl,
-                          width: 50,
-                          height: 70,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.error);
+                        leading: GestureDetector(
+                          onTap: () {
+                            // Navigate to BookDetailPage with all fields
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BookDetailPage(
+                                  title: title,
+                                  coverUrl: coverUrl,
+                                  summary: summary,
+                                  author: author,
+                                  rating: rating,
+                                ),
+                              ),
+                            );
                           },
-                        )
-                            : const Icon(Icons.book),
+                          child: coverUrl.isNotEmpty
+                              ? Image.network(
+                            coverUrl,
+                            width: 50,
+                            height: 70,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.error);
+                            },
+                          )
+                              : const Icon(Icons.book),
+                        ),
                         title: Text(
                           title,
                           style: TextStyle(
@@ -90,11 +111,10 @@ class _BooksListPageState extends State<BooksListPage> {
                         trailing: IconButton(
                           icon: const Icon(Icons.delete, color: Color(0xff8b0000)),
                           onPressed: () {
-                            _removeBookFromList(bookId); // Pass the bookId to remove it
+                            _removeBookFromList(bookId);
                           },
                         ),
                       ),
-                      // Divider with green color to separate books
                       Divider(
                         color: Color(0xff385723),
                         thickness: 1.5,
