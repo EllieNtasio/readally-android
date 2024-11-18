@@ -26,22 +26,27 @@ class DatabaseService {
 
 
   Stream<List<Map<String, dynamic>>> getBooksStream(List<dynamic> bookRefs) {
-    if (bookRefs.isEmpty) {
-      // If the bookRefs list is empty, return an empty list
-      return Stream.value([]);
+    // Check if bookRefs is null or empty and return an empty list
+    if (bookRefs == null || bookRefs.isEmpty) {
+      return Stream.value([]);  // Return an empty stream if no book references
     }
 
+    // Perform the query if the list is non-empty
     return _db.collection('books')
         .where(FieldPath.documentId, whereIn: bookRefs)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-      return {
-        'id': doc.id,
-        'title': doc['title'],
-        'cover': doc['cover'],
-        'rate': doc['rate'],
-      };
-    }).toList());
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return {
+          'id': doc.id,
+          'title': doc['title'],
+          'cover': doc['cover'],
+          'rate': doc['rate'],
+          'summ': doc['summ'],
+          'author': doc['author'],
+        };
+      }).toList();
+    });
   }
 
 

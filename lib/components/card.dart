@@ -17,15 +17,15 @@ class BookDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Handle rating parsing
     int parsedRating = int.tryParse(rating) ?? 0;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffFFFAF5),
-        title: Text(''),
-
+        backgroundColor: const Color(0xffFFFAF5),
+        title: Text(title.isNotEmpty ? title : 'Book Details'),
       ),
-      backgroundColor: Color(0xffFFFAF5),
+      backgroundColor: const Color(0xffFFFAF5),
       body: Stack(
         children: [
           Positioned(
@@ -54,7 +54,8 @@ class BookDetailPage extends StatelessWidget {
                 Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(
+                    child: coverUrl.isNotEmpty
+                        ? Image.network(
                       coverUrl,
                       width: 150,
                       height: 230,
@@ -62,12 +63,13 @@ class BookDetailPage extends StatelessWidget {
                       errorBuilder: (context, error, stackTrace) {
                         return const Icon(Icons.error);
                       },
-                    ),
+                    )
+                        : const Icon(Icons.error), // Fallback if no image
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  title,
+                  title.isNotEmpty ? title : 'Unknown Title',
                   style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -88,7 +90,7 @@ class BookDetailPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Author: $author',
+                        'Author: ${author.isNotEmpty ? author : 'Unknown Author'}',
                         style: const TextStyle(
                           fontSize: 18,
                           color: Colors.black54,
@@ -103,14 +105,14 @@ class BookDetailPage extends StatelessWidget {
                       const SizedBox(width: 15),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.star,
                             color: Color(0xffffb700),
                             size: 20,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            rating,
+                            rating.isNotEmpty ? rating : 'N/A',
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.black54,
@@ -153,7 +155,9 @@ class BookDetailPage extends StatelessWidget {
                               ),
                               padding: const EdgeInsets.all(10.0),
                               child: Text(
-                                summary,
+                                summary.isNotEmpty
+                                    ? summary
+                                    : 'No summary available',
                                 style: const TextStyle(fontSize: 20),
                                 textAlign: TextAlign.justify,
                               ),
