@@ -3,6 +3,7 @@ import 'package:readally/secpages/profile.dart';
 import 'package:readally/secpages/newlist.dart';
 import 'package:readally/secpages/settings.dart';
 import 'package:readally/secpages/search.dart';
+import 'package:readally/secpages/ratepage.dart'; // Import the RatePage
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -109,6 +110,25 @@ class AppDrawer extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SearchScreen()),
+                    );
+                  },
+                ),
+                SizedBox(height: 10),
+                // New "My Rates" option
+                ListTile(
+                  leading: Icon(Icons.star, color: Color(0xff001910), size: 30),  // Star icon
+                  title: Text(
+                    'My Rates',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to RatePage when "My Rates" is tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RatePage()),
                     );
                   },
                 ),

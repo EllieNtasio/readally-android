@@ -24,6 +24,27 @@ class DatabaseService {
     return booksList;
   }
 
+
+  Stream<List<Map<String, dynamic>>> getBooksStream(List<dynamic> bookRefs) {
+    if (bookRefs.isEmpty) {
+      // If the bookRefs list is empty, return an empty list
+      return Stream.value([]);
+    }
+
+    return _db.collection('books')
+        .where(FieldPath.documentId, whereIn: bookRefs)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        'title': doc['title'],
+        'cover': doc['cover'],
+        'rate': doc['rate'],
+      };
+    }).toList());
+  }
+
+
   // Stream to fetch lists in real-time from 'lists' collection
   Stream<List<Map<String, dynamic>>> getListsStream() {
     return _db.collection('lists').snapshots().map((snapshot) {
@@ -70,11 +91,11 @@ class DatabaseService {
   Future<void> updateBookRating(String bookId, String newRating) async {
     try {
       await _db.collection('books').doc(bookId).update({
-        'rate': newRating,  // Store the rating as a String
+        'rate': newRating, // Store as a string or number based on your Firestore schema
       });
-      print('Book rating updated');
+      print('Rating updated successfully!');
     } catch (e) {
-      print('Error updating book rating: $e');
+      print('Error updating rating: $e');
     }
   }
 

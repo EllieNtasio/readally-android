@@ -184,8 +184,8 @@ class BooksListSection extends StatelessWidget {
           const SizedBox(height: 12),
           SizedBox(
             height: 160,
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: databaseService.getBooksByReferences(bookRefs),
+            child: StreamBuilder<List<Map<String, dynamic>>>(
+              stream: databaseService.getBooksStream(bookRefs),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
