@@ -47,7 +47,7 @@ class _SignInPageState extends State<SignInPage> {
       body: Stack(
         children: [
           Positioned(
-            bottom: -100,
+            bottom: -110,
             left: 140,
             child: Padding(
               padding: const EdgeInsets.all(16.0),

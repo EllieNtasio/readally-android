@@ -17,7 +17,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Positioned(
             top: -40,
-            left: 250,
+            left: 220,
             child: Image.asset(
               'assets/images/circles.png',
               width: 300,
@@ -26,7 +26,7 @@ class SettingsPage extends StatelessWidget {
           ),
           Positioned(
             bottom: -40,
-            right: 180,
+            right: 140,
             child: Image.asset(
               'assets/images/bb.png',
               width: 400,
@@ -39,7 +39,7 @@ class SettingsPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 0),
                   Text(
                     'SETTINGS',
                     style: TextStyle(
@@ -50,13 +50,13 @@ class SettingsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 35),
                   _buildSettingOption(context, Icons.account_circle, 'Login & Security', const LoginSecurityPage()),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
                   _buildSettingOption(context, Icons.notifications, 'Notifications', const NotificationsPage()),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
                   _buildSettingOption(context, Icons.ads_click, 'Interest Based-Ads', const InterestBasedAdsPage()),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
                   _buildSettingOption(context, Icons.access_alarm, 'Accessibility', const AccessibilityPage()),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () {
                       print('Changes saved');

@@ -16,12 +16,6 @@ class _LoginSecurityPageState extends State<LoginSecurityPage> {
   bool _isSwitched = false;
 
   @override
-  void initState() {
-    super.initState();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -31,173 +25,175 @@ class _LoginSecurityPageState extends State<LoginSecurityPage> {
         automaticallyImplyLeading: true,
       ),
       backgroundColor: const Color(0xFFFFFAf5),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            const Center(
-              child: Text(
-                'Login & Security ',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF385723),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              width: 450,
-              padding: const EdgeInsets.all(10),
-              child: const Text(
-                'Your account details are used to verify your account and remain private.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 1),
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  letterSpacing: 0,
-                  fontWeight: FontWeight.normal,
-                  height: 1.2,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Divider(
-              color: Color(0xFF385723),
-              thickness: 2,
-            ),
-            const SizedBox(height: 10),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    'Username: Username Email: email@email.com                    Password: *********',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
-                  ),
-                ),
-                Text(
-                  'Edit',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFF385723),
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Password',
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'Tap to change your password.',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Email',
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 5),
-            const Text(
-              'Tap to change your email.',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'Account Activity',
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Row(
-              children: [
-                const Text(
-                  'Suspicious Activity Alert',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                const Spacer(),
-                Transform.scale(
-                  scale: 1.3,
-                  child: Checkbox(
-                    value: _isTicked,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        _isTicked = value!;
-                      });
-                    },
-                    shape: const CircleBorder(),
-                    activeColor: const Color(0xFF385723),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Divider(
-              color: Color(0xFF385723),
-              thickness: 2,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                const Text(
-                  'Stay Logged In',
+      body: SingleChildScrollView( // Make the content scrollable
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 28.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+              const Center(
+                child: Text(
+                  'Login & Security ',
                   style: TextStyle(
                     fontSize: 28,
-                    fontFamily: 'Inter',
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF385723),
                   ),
                 ),
-                const Spacer(),
-                Switch(
-                  value: _isSwitched,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _isSwitched = value;
-                    });
-                  },
-                  activeColor: const Color(0xFF94AB71),
-                  activeTrackColor: const Color(0xFFC7D9B5),
-                  inactiveThumbColor: const Color(0xFFC7D9B5),
-                  inactiveTrackColor: const Color(0xFF94AB71),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                width: 450,
+                padding: const EdgeInsets.all(10),
+                child: const Text(
+                  'Your account details are used to verify your account and remain private.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Color.fromRGBO(0, 0, 0, 1),
+                    fontFamily: 'Inter',
+                    fontSize: 18,
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.normal,
+                    height: 1.2,
+                  ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 20),
+              const Divider(
+                color: Color(0xFF385723),
+                thickness: 2,
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Username: Username Email: email@email.com                    Password: *********',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
+                    ),
+                  ),
+                  Text(
+                    'Edit',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF385723),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Password',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'Tap to change your password.',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                'Tap to change your email.',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Account Activity',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Row(
+                children: [
+                  const Text(
+                    'Suspicious Activity Alert',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  const Spacer(),
+                  Transform.scale(
+                    scale: 1.3,
+                    child: Checkbox(
+                      value: _isTicked,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isTicked = value!;
+                        });
+                      },
+                      shape: const CircleBorder(),
+                      activeColor: const Color(0xFF385723),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Divider(
+                color: Color(0xFF385723),
+                thickness: 2,
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Text(
+                    'Stay Logged In',
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  Switch(
+                    value: _isSwitched,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _isSwitched = value;
+                      });
+                    },
+                    activeColor: const Color(0xFF94AB71),
+                    activeTrackColor: const Color(0xFFC7D9B5),
+                    inactiveThumbColor: const Color(0xFFC7D9B5),
+                    inactiveTrackColor: const Color(0xFF94AB71),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
 
 // Σελίδα για Notifications
 

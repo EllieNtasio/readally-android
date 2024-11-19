@@ -14,6 +14,7 @@ class Opening extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height:50),
             const Text(
               'READALLY',
               textAlign: TextAlign.center,
@@ -24,13 +25,13 @@ class Opening extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 10),
             Image.asset(
               'assets/images/Logo.png',
               width: 266.51,
               height: 232.16,
             ),
-            const SizedBox(height: 35),
+            const SizedBox(height: 10),
             Container(
               width: 299,
               padding: const EdgeInsets.all(10),
@@ -44,7 +45,7 @@ class Opening extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(

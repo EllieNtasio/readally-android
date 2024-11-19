@@ -39,101 +39,97 @@ class _NewListPageState extends State<NewListPage> {
         title: const Text('Lists'),
         backgroundColor: const Color(0xFFFFFAF5),
       ),
-      body: Container(
-        color: const Color(0xFFFFFAF5),
-        padding: const EdgeInsets.all(25.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Existing Book Lists',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff001910),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Color(0xffFFFAF5),
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: listNames.map((listName) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12.0),
-                    child: _ListItem(
-                      listName: listName,
-                      onTap: () {
-                        print('Tapped on $listName');
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      _showCreateListDialog(context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.add_circle_outline,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            color: const Color(0xFFFFFAF5),
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Existing Book Lists',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff001910),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    color: Color(0xffFFFAF5),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: listNames.map((listName) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: _ListItem(
+                          listName: listName,
+                          onTap: () {
+                            print('Tapped on $listName');
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                GestureDetector(
+                  onTap: () {
+                    _showCreateListDialog(context);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_circle_outline,
+                        color: Color(0xff385723),
+                        size: 30,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Create a New List',
+                        style: TextStyle(
+                          fontSize: 18,
                           color: Color(0xff385723),
-                          size: 30,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Create a New List',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Color(0xff385723),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 30),
-                  GestureDetector(
-                    onTap: () {
-                      _showDeleteListDialog(context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.delete_outline,
+                ),
+                const SizedBox(height: 30),
+                GestureDetector(
+                  onTap: () {
+                    _showDeleteListDialog(context);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.delete_outline,
+                        color: Color(0xff8b0000),
+                        size: 30,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Delete a List',
+                        style: TextStyle(
+                          fontSize: 18,
                           color: Color(0xff8b0000),
-                          size: 30,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'Delete a List',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Color(0xff8b0000),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

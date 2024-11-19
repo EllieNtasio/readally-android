@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:readally/components/card.dart';
 import 'package:readally/database.dart';
@@ -54,7 +55,7 @@ class BooksPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Welcome back, Ellie!',
+                        'Welcome Ellie!',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -74,8 +75,8 @@ class BooksPage extends StatelessWidget {
                   ),
                   Image.asset(
                     'assets/images/flowers.png',
-                    width: 90,
-                    height: 90,
+                    width: 70,
+                    height: 70,
                     fit: BoxFit.cover,
                   ),
                 ],

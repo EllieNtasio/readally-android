@@ -89,14 +89,20 @@ class BookDetailPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Author: ${author.isNotEmpty ? author : 'Unknown Author'}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          color: Colors.black54,
+                      // Use Flexible widget to make the author text responsive
+                      Flexible(
+                        child: Text(
+                          'Author: ${author.isNotEmpty ? author : 'Unknown Author'}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.black54,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1, // Limit to a single line, wrap to ellipsis if needed
+                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
                         ),
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 15),
                       Container(
                         height: 30,
                         width: 1,

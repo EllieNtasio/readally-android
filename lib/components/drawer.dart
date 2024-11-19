@@ -21,44 +21,49 @@ class AppDrawer extends StatelessWidget {
                   width: double.infinity,
                   height: 180.0,
                   padding: EdgeInsets.all(14.0),
-                  child: Row(
+                  child: Column(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Color(0xff385723),
-                            width: 3,
+                      SizedBox(height: 40), // Added space above CircleAvatar and text
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Color(0xff385723),
+                                width: 3,
+                              ),
+                            ),
+                            child: CircleAvatar(
+                              radius: 45,
+                              backgroundImage: AssetImage('assets/images/snoopy.png'),
+                            ),
                           ),
-                        ),
-                        child: CircleAvatar(
-                          radius: 45,
-                          backgroundImage: AssetImage('assets/images/snoopy.png'),
-                        ),
-                      ),
-                      SizedBox(width: 15),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Ellie',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                              ),
+                          SizedBox(width: 15),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Ellie',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22,
+                                  ),
+                                ),
+                                Text(
+                                  'ellie@email.com',
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              'ellie@email.com',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
