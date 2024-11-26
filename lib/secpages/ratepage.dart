@@ -26,7 +26,7 @@ class RatePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Your ratings',
+                      'Your Ratings',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:readally/opening.dart';
+import 'package:readally/secpages/edit.dart'; // Import the edit screen here
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String name = 'Ellie';
+  String email = 'ellie@email.com';
+  String bio = 'I am an avid reader, passionate about literature and technology. Enjoying discovering new books every day!';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
                 height: 400,
               ),
             ),
-            SingleChildScrollView( // Wrap the content inside SingleChildScrollView
+            SingleChildScrollView(
               child: Container(
                 padding: EdgeInsets.all(0),
                 child: Column(
@@ -88,7 +98,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 25),
                     Text(
-                      'Ellie',
+                      name, // Dynamic name
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -105,7 +115,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 7),
                         Text(
-                          'ellie@email.com',
+                          email, // Dynamic email
                           style: TextStyle(
                             fontSize: 18,
                             color: Color(0xffA6A6A6),
@@ -212,7 +222,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'I am an avid reader, passionate about literature and technology. Enjoying discovering new books every day!',
+                              bio, // Dynamic bio
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff385723),
@@ -234,7 +244,28 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            // Navigate to EditProfileScreen and wait for the result
+                            final updatedData = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditProfileScreen(
+                                  currentName: name,
+                                  currentEmail: email,
+                                  currentBio: bio,
+                                ),
+                              ),
+                            );
+
+                            // Check if data was updated, and set the state with new values
+                            if (updatedData != null) {
+                              setState(() {
+                                name = updatedData['name'];
+                                email = updatedData['email'];
+                                bio = updatedData['bio'];
+                              });
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xff385723),
                             padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
@@ -279,7 +310,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 40), // Ensure there’s enough bottom space
+                    SizedBox(height: 40),
                   ],
                 ),
               ),

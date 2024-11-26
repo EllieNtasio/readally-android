@@ -211,70 +211,73 @@ class _NewListPageState extends State<NewListPage> {
   }
 
   void _showDeleteListDialog(BuildContext context) {
-    final TextEditingController _controller = TextEditingController();
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Choose a List to Delete',
-            style: TextStyle(
-              color: Color(0xff001910),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButton<String>(
-                value: selectedList,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedList = newValue;
-                  });
-                },
-                hint: const Text('Select List'),
-                items: listNames.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                'Cancel',
+        return StatefulBuilder(
+          builder: (context, setState) {  // Use StatefulBuilder to allow state updates within the dialog
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              title: const Text(
+                'Choose a List to Delete',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color(0xff001910),
                 ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                if (selectedList != null) {
-                  _deleteListFromFirestore(selectedList!);
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text(
-                'Delete',
-                style: TextStyle(
-                  color: Color(0xff8b0000),
-                ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButton<String>(
+                    value: selectedList,  // The selected value
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedList = newValue;  // Update the selectedList value
+                      });
+                    },
+                    hint: const Text('Select List'),  // Shown when no list is selected
+                    items: listNames.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);  // Close the dialog
+                  },
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (selectedList != null) {
+                      _deleteListFromFirestore(selectedList!);  // Delete the selected list
+                      Navigator.pop(context);  // Close the dialog after deletion
+                    }
+                  },
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(
+                      color: Color(0xff8b0000),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
+
 
   Future<void> _deleteListFromFirestore(String listName) async {
     try {

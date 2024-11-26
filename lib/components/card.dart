@@ -139,7 +139,7 @@ class BookDetailPage extends StatelessWidget {
                         child: Text(
                           'About this book:',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 20,
                             fontWeight: FontWeight.normal,
                             fontFamily: 'Inter',
                             color: Color(0xff001910),
@@ -164,7 +164,7 @@ class BookDetailPage extends StatelessWidget {
                                 summary.isNotEmpty
                                     ? summary
                                     : 'No summary available',
-                                style: const TextStyle(fontSize: 20),
+                                style: const TextStyle(fontSize: 18),
                                 textAlign: TextAlign.justify,
                               ),
                             ),
