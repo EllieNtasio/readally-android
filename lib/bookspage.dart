@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readally/components/card.dart';
 import 'package:readally/database.dart';
 import 'package:readally/components/drawer.dart';
-import 'package:readally/full_books_list.dart';
+import 'package:readally/components/full_books_list.dart';
 
 class BooksPage extends StatelessWidget {
   final DatabaseService databaseService = DatabaseService();

@@ -16,13 +16,11 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
-
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -39,12 +37,10 @@ class _SignInPageState extends State<SignInPage> {
     });
 
     try {
-
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
 
       Navigator.pushReplacement(
         context,
@@ -53,15 +49,8 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
     } on FirebaseAuthException catch (e) {
-      String message = '';
+      String message = 'Wrong Email or Password.Please try again.';
 
-      if (e.code == 'user-not-found') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided.';
-      } else {
-        message = e.message ?? 'An error occurred. Please try again.';
-      }
 
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -231,8 +220,6 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-
-
                   const SizedBox(height: 40),
                   _isLoading
                       ? const CircularProgressIndicator()
