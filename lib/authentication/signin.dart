@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:readally/bookspage.dart';
 
 class SignInPage extends StatefulWidget {
@@ -10,28 +11,69 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool _isPasswordVisible = false;
+  bool _isLoading = false;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _signIn() {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _signIn() async {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    if (email == 'ellie@email.com' && password == '123456789') {
-      Navigator.push(
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter email and password!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => BooksPage(),
         ),
       );
-    } else {
+    } on FirebaseAuthException catch (e) {
+      String message = '';
+
+      if (e.code == 'user-not-found') {
+        message = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        message = 'Wrong password provided.';
+      } else {
+        message = e.message ?? 'An error occurred. Please try again.';
+      }
+
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Incorrect email or password!'),
+        SnackBar(
+          content: Text(message),
           backgroundColor: Colors.red,
         ),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -189,8 +231,12 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
+
+
                   const SizedBox(height: 40),
-                  ElevatedButton(
+                  _isLoading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
                     onPressed: _signIn,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF385723),

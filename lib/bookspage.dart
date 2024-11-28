@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:readally/components/card.dart';
 import 'package:readally/database.dart';
@@ -30,7 +29,6 @@ class BooksPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.camera_alt),
             onPressed: () {
-              // Add functionality for the camera icon here
               print('Camera icon pressed');
             },
           ),

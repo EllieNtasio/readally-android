@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:readally/secpages/profile.dart';
 import 'package:readally/secpages/newlist.dart';
 import 'package:readally/secpages/settings.dart';
 import 'package:readally/secpages/search.dart';
-import 'package:readally/secpages/ratepage.dart'; // Import the RatePage
+import 'package:readally/secpages/ratepage.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    String? email = user?.email ?? 'No email available';
+
     return Drawer(
       child: Container(
         color: Color(0xFFFFFAF5),
@@ -23,7 +27,7 @@ class AppDrawer extends StatelessWidget {
                   padding: EdgeInsets.all(14.0),
                   child: Column(
                     children: [
-                      SizedBox(height: 40), // Added space above CircleAvatar and text
+                      SizedBox(height: 40),
                       Row(
                         children: [
                           Container(
@@ -54,10 +58,10 @@ class AppDrawer extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  'ellie@email.com',
+                                  email,
                                   style: TextStyle(
                                     color: Colors.white70,
-                                    fontSize: 18,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
@@ -119,9 +123,8 @@ class AppDrawer extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 10),
-                // New "My Rates" option
                 ListTile(
-                  leading: Icon(Icons.star, color: Color(0xff001910), size: 30),  // Star icon
+                  leading: Icon(Icons.star, color: Color(0xff001910), size: 30),
                   title: Text(
                     'My Rates',
                     style: TextStyle(
@@ -130,7 +133,6 @@ class AppDrawer extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    // Navigate to RatePage when "My Rates" is tapped
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => RatePage()),

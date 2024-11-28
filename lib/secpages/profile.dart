@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:readally/opening.dart';
-import 'package:readally/secpages/edit.dart'; // Import the edit screen here
+import 'package:readally/secpages/edit.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -10,8 +11,23 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   String name = 'Ellie';
-  String email = 'ellie@email.com';
+  String email = 'Loading...';
   String bio = 'I am an avid reader, passionate about literature and technology. Enjoying discovering new books every day!';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserDetails();
+  }
+
+  void _fetchUserDetails() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        email = user.email ?? 'No email available';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(height: 25),
                     Text(
-                      name, // Dynamic name
+                      name,
                       style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -115,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         SizedBox(width: 7),
                         Text(
-                          email, // Dynamic email
+                          email,
                           style: TextStyle(
                             fontSize: 18,
                             color: Color(0xffA6A6A6),
@@ -222,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             SizedBox(height: 8),
                             Text(
-                              bio, // Dynamic bio
+                              bio,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff385723),
@@ -245,7 +261,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         ElevatedButton(
                           onPressed: () async {
-                            // Navigate to EditProfileScreen and wait for the result
                             final updatedData = await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -257,7 +272,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             );
 
-                            // Check if data was updated, and set the state with new values
                             if (updatedData != null) {
                               setState(() {
                                 name = updatedData['name'];
@@ -286,6 +300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(width: 20),
                         ElevatedButton(
                           onPressed: () {
+                            FirebaseAuth.instance.signOut();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => Opening()),

@@ -215,7 +215,7 @@ class _NewListPageState extends State<NewListPage> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
-          builder: (context, setState) {  // Use StatefulBuilder to allow state updates within the dialog
+          builder: (context, setState) {
             return AlertDialog(
               backgroundColor: Colors.white,
               title: const Text(
@@ -228,13 +228,13 @@ class _NewListPageState extends State<NewListPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButton<String>(
-                    value: selectedList,  // The selected value
+                    value: selectedList,
                     onChanged: (String? newValue) {
                       setState(() {
-                        selectedList = newValue;  // Update the selectedList value
+                        selectedList = newValue;
                       });
                     },
-                    hint: const Text('Select List'),  // Shown when no list is selected
+                    hint: const Text('Select List'),
                     items: listNames.map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -247,7 +247,7 @@ class _NewListPageState extends State<NewListPage> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);  // Close the dialog
+                    Navigator.pop(context);
                   },
                   child: const Text(
                     'Cancel',
@@ -259,8 +259,8 @@ class _NewListPageState extends State<NewListPage> {
                 TextButton(
                   onPressed: () {
                     if (selectedList != null) {
-                      _deleteListFromFirestore(selectedList!);  // Delete the selected list
-                      Navigator.pop(context);  // Close the dialog after deletion
+                      _deleteListFromFirestore(selectedList!);
+                      Navigator.pop(context);
                     }
                   },
                   child: const Text(
@@ -277,7 +277,6 @@ class _NewListPageState extends State<NewListPage> {
       },
     );
   }
-
 
   Future<void> _deleteListFromFirestore(String listName) async {
     try {

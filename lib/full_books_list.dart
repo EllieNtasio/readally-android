@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readally/database.dart';
-import 'package:readally/components/card.dart';  // Import your BookDetailPage
+import 'package:readally/components/card.dart';
 
 class BooksListPage extends StatefulWidget {
   final String title;
@@ -58,9 +58,9 @@ class _BooksListPageState extends State<BooksListPage> {
                   final book = books[index];
                   final title = book['title'] ?? 'No Title';
                   final coverUrl = book['cover'] ?? '';
-                  final summary = book['summ'] ?? 'No summary available'; // Summary field
-                  final author = book['author'] ?? 'Unknown Author';      // Author field
-                  final rating = book['rate'] ?? '0';                     // Rating field
+                  final summary = book['summ'] ?? 'No summary available';
+                  final author = book['author'] ?? 'Unknown Author';
+                  final rating = book['rate'] ?? '0';
                   final bookId = book['id'];
 
                   if (bookId == null) {
@@ -75,7 +75,7 @@ class _BooksListPageState extends State<BooksListPage> {
                         contentPadding: const EdgeInsets.symmetric(vertical: 10.0),
                         leading: GestureDetector(
                           onTap: () {
-                            // Navigate to BookDetailPage with all fields
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -141,7 +141,7 @@ class _BooksListPageState extends State<BooksListPage> {
     }
 
     try {
-      // Attempt to remove the book ID from Firestore
+
       await widget.databaseService.removeBookFromList(widget.title, bookId);
 
       // Update the local list by removing the book ID

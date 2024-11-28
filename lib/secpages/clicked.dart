@@ -61,7 +61,7 @@ class _LoginSecurityPageState extends State<LoginSecurityPage> {
               thickness: 2,
             ),
             const SizedBox(height: 10),
-            // Username and Email Section
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -78,12 +78,12 @@ class _LoginSecurityPageState extends State<LoginSecurityPage> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigate to the EditProfileScreen
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => EditProfileScreen(
-                          currentName: 'Ellie',    // Pass the current profile data
+                          currentName: 'Ellie',
                           currentEmail: 'ellie@email.com',
                           currentBio: 'I am an avid reader, passionate about literature and technology. Enjoying discovering new books every day!',
                         ),
@@ -206,7 +206,7 @@ class _LoginSecurityPageState extends State<LoginSecurityPage> {
   }
 }
 
-// Σελίδα για Notifications
+// Notifications Page
 
 
 class NotificationsPage extends StatefulWidget {
@@ -224,7 +224,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   void initState() {
     super.initState();
-    // Removed shared preferences loading logic
   }
 
   @override
@@ -374,7 +373,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 }
 
 
-// Σελίδα για Interest Based-Ads
+// Interest Based-Ads Page
 
 
 class InterestBasedAdsPage extends StatefulWidget {
@@ -392,7 +391,7 @@ class _InterestBasedAdsPageState extends State<InterestBasedAdsPage> {
   @override
   void initState() {
     super.initState();
-    // Removed shared preferences loading logic
+
   }
 
   @override
@@ -584,7 +583,7 @@ class _InterestBasedAdsPageState extends State<InterestBasedAdsPage> {
 }
 
 
-// Σελίδα για Accessibility
+//  Accessibility Page
 
 
 class AccessibilityPage extends StatefulWidget {
@@ -605,7 +604,7 @@ class _AccessibilityPageState extends State<AccessibilityPage> {
   @override
   void initState() {
     super.initState();
-    // Removed shared preferences loading logic
+
   }
 
   void _toggleZoomState() {

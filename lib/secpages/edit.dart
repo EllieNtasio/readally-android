@@ -5,7 +5,7 @@ class EditProfileScreen extends StatefulWidget {
   final String currentEmail;
   final String currentBio;
 
-  // Constructor to accept the current profile data
+
   EditProfileScreen({
     required this.currentName,
     required this.currentEmail,
@@ -25,7 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize the form fields with the current values
+
     _name = widget.currentName;
     _email = widget.currentEmail;
     _bio = widget.currentBio;
@@ -105,7 +105,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             Positioned.fill(
                               child: GestureDetector(
                                 onTap: () {
-                                  // Add functionality to change the profile picture here
+
                                   print("Change profile picture tapped!");
                                 },
                                 child: Container(
@@ -247,14 +247,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   if (_formKey.currentState?.validate() ?? false) {
                                     _formKey.currentState?.save();
 
-                                    // Prepare the updated data
+
                                     final updatedData = {
                                       'name': _name,
                                       'email': _email,
                                       'bio': _bio,
                                     };
 
-                                    // Pop back to the previous screen with the updated data
+
                                     Navigator.pop(context, updatedData);
                                   }
                                 },

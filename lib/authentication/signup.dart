@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:readally/bookspage.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -9,7 +10,51 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   bool _isTicked = true;
+  bool _isLoading = false;
+
+  Future<void> _signUp() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    if (!_isTicked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You must agree to the Terms and Conditions')),
+      );
+      return;
+    }
+
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => BooksPage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.message}')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
         title: const Text(''),
       ),
       backgroundColor: const Color(0xffFFFAF5),
-      resizeToAvoidBottomInset: true, // Automatically adjust when keyboard appears
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
           children: [
@@ -35,7 +80,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            SingleChildScrollView( // Allows the content to be scrollable
+            SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: Column(
@@ -60,7 +105,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 40),
-                    // Username Input
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.0),
                       child: Align(
@@ -78,6 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: TextField(
+                        controller: _usernameController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Color(0xFFC7D9B5)),
@@ -95,7 +140,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    // Email Input
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.0),
                       child: Align(
@@ -113,6 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: TextField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Color(0xFFC7D9B5)),
@@ -130,7 +175,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    // Password Input
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 25.0),
                       child: Align(
@@ -148,6 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),
                       child: TextField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
@@ -166,7 +211,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    // Checkbox and Terms
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 19.0),
                       child: Row(
@@ -194,16 +238,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    // Sign Up Button
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BooksPage(),
-                          ),
-                        );
-                      },
+                    _isLoading
+                        ? const CircularProgressIndicator()
+                        : ElevatedButton(
+                      onPressed: _signUp,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF385723),
                         minimumSize: const Size(247, 56),

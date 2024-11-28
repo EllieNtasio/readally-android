@@ -17,7 +17,7 @@ class BookDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Handle rating parsing
+
     int parsedRating = int.tryParse(rating) ?? 0;
 
     return Scaffold(
@@ -89,7 +89,7 @@ class BookDetailPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Use Flexible widget to make the author text responsive
+
                       Flexible(
                         child: Text(
                           'Author: ${author.isNotEmpty ? author : 'Unknown Author'}',
@@ -98,8 +98,8 @@ class BookDetailPage extends StatelessWidget {
                             color: Colors.black54,
                           ),
                           textAlign: TextAlign.center,
-                          maxLines: 1, // Limit to a single line, wrap to ellipsis if needed
-                          overflow: TextOverflow.ellipsis, // Adds ellipsis if text overflows
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const SizedBox(width: 15),
