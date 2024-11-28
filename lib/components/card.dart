@@ -30,7 +30,7 @@ class BookDetailPage extends StatelessWidget {
         children: [
           Positioned(
             top: 50,
-            left: 250,
+            left: 230,
             child: Image.asset(
               'assets/images/circles.png',
               width: 300,
@@ -39,7 +39,7 @@ class BookDetailPage extends StatelessWidget {
           ),
           Positioned(
             top: -35,
-            right: 220,
+            right: 200,
             child: Image.asset(
               'assets/images/bb.png',
               width: 300,
@@ -57,8 +57,8 @@ class BookDetailPage extends StatelessWidget {
                     child: coverUrl.isNotEmpty
                         ? Image.network(
                       coverUrl,
-                      width: 150,
-                      height: 230,
+                      width: 140,
+                      height: 220,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return const Icon(Icons.error);
