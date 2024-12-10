@@ -1,9 +1,9 @@
-                                 Personal Library App 📚 (Flutter + Firebase)
+                                  Personal Library App 📚 (Flutter + Firebase)
 This is a Flutter app that allows users to create and manage their own custom book lists, functioning as a personal library.
 Users can create new lists, add or remove books from these lists, and assign ratings to each book. 
 The app uses Firebase for backend support, enabling features like data storage and synchronization across devices.
 
-                                                 Features 🚀
+                                                Features 🚀
 Create and Manage Book Lists: Users can create multiple book lists (e.g., "Favorites", "To-Read", etc.).
 
 Add and Remove Books: Books can be easily added or removed from any custom list.
@@ -35,9 +35,13 @@ Implementing dynamic ListViews and handling user interactions.
 
 Flutter routing for navigation between screens.
 
-                                                Technologies Used 🛠
+                                              Technologies Used 🛠
 Flutter: Cross-platform mobile development framework.
+
 Dart: Programming language used for Flutter apps.
+
 Firebase: Backend services for data storage and real-time syncing.
+
 Cloud Firestore for storing user data.
+
 Firebase Authentication (optional) for user sign-in.
