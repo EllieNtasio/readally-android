@@ -49,7 +49,6 @@ class DatabaseService {
     });
   }
 
-
   // Stream to fetch lists in real-time from 'lists' collection
   Stream<List<Map<String, dynamic>>> getListsStream() {
     return _db.collection('lists').snapshots().map((snapshot) {
@@ -168,5 +167,19 @@ class DatabaseService {
     } catch (e) {
       print('Error deleting book from collection: $e');
     }
+  }
+
+  // Stream to get books from a specific list ID by book references
+  Stream<List<Map<String, dynamic>>> getBooksStreamByListId(String listId) {
+    return _db.collection('lists')
+        .doc(listId)  // Get the specific list by ID
+        .snapshots()
+        .asyncMap((snapshot) async {
+      // Fetch book references from the 'books' field of the list document
+      final bookRefs = snapshot.data()?['books'] ?? [];
+
+      // Now get books for these references
+      return await getBooksByReferences(bookRefs);
+    });
   }
 }

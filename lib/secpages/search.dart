@@ -49,6 +49,9 @@ class _SearchScreenState extends State<SearchScreen> {
       };
     }).toList();
 
+    // Exclude the 'arbooks' list
+    availableLists = availableLists.where((list) => list['name'] != 'arbooks').toList();
+
     showDialog(
       context: context,
       builder: (context) {

@@ -49,7 +49,6 @@ class RatePage extends StatelessWidget {
           ),
           Expanded(
             child: StreamBuilder<List<Map<String, dynamic>>>(
-
               stream: databaseService.getListsStream(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -62,8 +61,9 @@ class RatePage extends StatelessWidget {
 
                 if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   final lists = snapshot.data!.where((list) {
-
-                    return list['books'] != null && (list['books'] as List).isNotEmpty;
+                    return list['books'] != null &&
+                        (list['books'] as List).isNotEmpty &&
+                        list['listname'] != 'arbooks'; // Exclude the 'arbooks' list
                   }).toList();
 
                   if (lists.isEmpty) {
@@ -133,7 +133,6 @@ class RateListSection extends StatelessWidget {
           SizedBox(
             height: 160,
             child: StreamBuilder<List<Map<String, dynamic>>>(
-
               stream: databaseService.getBooksStream(bookRefs),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -164,7 +163,6 @@ class RateListSection extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12.0),
                             child: GestureDetector(
                               onTap: () {
-
                                 _showRatingDialog(context, book, databaseService);
                               },
                               child: Column(
@@ -245,17 +243,13 @@ class RateListSection extends StatelessWidget {
                 if (newRating.isNotEmpty) {
                   final double parsedRating = double.tryParse(newRating) ?? 0.0;
 
-
                   databaseService.updateBookRating(book['id'], parsedRating.toString());
-
 
                   Navigator.of(context).pop();
                 }
               },
-
               child: Text('Update Rating',style: TextStyle(color: Colors.green)),
             ),
-
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
@@ -272,7 +266,6 @@ class RateListSection extends StatelessWidget {
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-
   Stream<List<Map<String, dynamic>>> getBooksStream(List<dynamic> bookRefs) {
     return _db.collection('books')
         .where(FieldPath.documentId, whereIn: bookRefs)
@@ -286,7 +279,6 @@ class DatabaseService {
       };
     }).toList());
   }
-
 
   Stream<List<Map<String, dynamic>>> getListsStream() {
     return _db.collection('lists')

@@ -3,6 +3,7 @@ import 'package:readally/components/card.dart';
 import 'package:readally/database.dart';
 import 'package:readally/components/drawer.dart';
 import 'package:readally/components/full_books_list.dart';
+import 'package:readally/secpages/arbooks.dart';
 
 class BooksPage extends StatelessWidget {
   final DatabaseService databaseService = DatabaseService();
@@ -29,7 +30,10 @@ class BooksPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.camera_alt),
             onPressed: () {
-              print('Camera icon pressed');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ARBooksPage()),
+              );
             },
           ),
         ],
@@ -96,10 +100,16 @@ class BooksPage extends StatelessWidget {
                 if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   final lists = snapshot.data!;
 
+                  // Filter out the list with the name 'arbooks'
+                  final filteredLists = lists.where((list) {
+                    // Only include lists that don't have the name 'arbooks'
+                    return list['listname'] != 'arbooks';
+                  }).toList();
+
                   return ListView.builder(
-                    itemCount: lists.length,
+                    itemCount: filteredLists.length,
                     itemBuilder: (context, index) {
-                      final list = lists[index];
+                      final list = filteredLists[index];
                       final listName = list['listname'];
                       final bookRefs = list['books'];
 

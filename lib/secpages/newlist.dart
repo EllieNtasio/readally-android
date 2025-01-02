@@ -258,9 +258,16 @@ class _NewListPageState extends State<NewListPage> {
                 ),
                 TextButton(
                   onPressed: () {
-                    if (selectedList != null) {
+                    if (selectedList != null && selectedList != 'arbooks') {
                       _deleteListFromFirestore(selectedList!);
                       Navigator.pop(context);
+                    } else if (selectedList == 'arbooks') {
+                      // Show a message that 'arbooks' cannot be deleted
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('The "arbooks" list cannot be deleted.'),
+                        ),
+                      );
                     }
                   },
                   child: const Text(
