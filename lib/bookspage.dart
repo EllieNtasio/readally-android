@@ -64,7 +64,7 @@ class BooksPage extends StatelessWidget {
                           color: Color(0xffF385723),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      SizedBox(height: 9),
                       Text(
                         'Ready to explore more books?',
                         style: TextStyle(
