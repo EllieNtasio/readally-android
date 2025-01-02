@@ -34,7 +34,7 @@ class ARBooksPage extends StatelessWidget {
                         Text(
                           'You scanned something?',
                           style: TextStyle(
-                            fontSize: 26,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Color(0xff385723),
                           ),
@@ -55,7 +55,7 @@ class ARBooksPage extends StatelessWidget {
                   ),
                   Image.asset(
                     'assets/images/pana.png',
-                    width: 180,
+                    width: 130,
                     height: 120,
                     fit: BoxFit.cover,
                   ),
