@@ -37,7 +37,7 @@ class _BooksListPageState extends State<BooksListPage> {
       backgroundColor: const Color(0xffFFFAF5),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: widget.databaseService.getBooksByReferences(_currentBookRefs),
-        // Fetch books by their IDs
+
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -144,7 +144,7 @@ class _BooksListPageState extends State<BooksListPage> {
 
       await widget.databaseService.removeBookFromList(widget.title, bookId);
 
-      // Update the local list by removing the book ID
+
       setState(() {
         _currentBookRefs.remove(bookId);
       });

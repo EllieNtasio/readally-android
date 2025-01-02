@@ -49,7 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
       };
     }).toList();
 
-    // Exclude the 'arbooks' list
+
     availableLists = availableLists.where((list) => list['name'] != 'arbooks').toList();
 
     showDialog(
@@ -141,14 +141,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 final book = searchResults[index];
                 final title = book['title'] ?? 'No Title';
                 final coverUrl = book['cover'] ?? '';
-                final summary = book['summ'] ?? 'No summary available';  // Summary field
-                final author = book['author'] ?? 'Unknown Author';      // Author field
-                final rating = book['rate'] ?? '0';                     // Rating field
+                final summary = book['summ'] ?? 'No summary available';
+                final author = book['author'] ?? 'Unknown Author';
+                final rating = book['rate'] ?? '0';
                 final bookId = book['id'];
 
                 return GestureDetector(
                   onTap: () {
-                    // Navigate to BookDetailPage with all fields
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -205,7 +205,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         IconButton(
                           icon: const Icon(Icons.add_circle_outline, color: Colors.grey),
                           onPressed: () {
-                            // Show move-to-list dialog when add icon is pressed
+
                             showMoveToListDialog(context, bookId, title);
                           },
                         ),

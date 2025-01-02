@@ -100,9 +100,9 @@ class BooksPage extends StatelessWidget {
                 if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                   final lists = snapshot.data!;
 
-                  // Filter out the list with the name 'arbooks'
+
                   final filteredLists = lists.where((list) {
-                    // Only include lists that don't have the name 'arbooks'
+
                     return list['listname'] != 'arbooks';
                   }).toList();
 

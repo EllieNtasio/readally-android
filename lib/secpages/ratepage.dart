@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readally/database.dart';  // Import your DatabaseService
+import 'package:readally/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RatePage extends StatelessWidget {
@@ -221,7 +221,7 @@ class RateListSection extends StatelessWidget {
     );
   }
 
-  // Method to show the rating dialog and allow the user to change the rating
+
   void _showRatingDialog(BuildContext context, Map<String, dynamic> book, DatabaseService databaseService) {
     final TextEditingController ratingController = TextEditingController(text: book['rate'].toString());
 
@@ -252,7 +252,7 @@ class RateListSection extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Cancel',style: TextStyle(color: Colors.black)),
             ),
@@ -291,7 +291,7 @@ class DatabaseService {
     }).toList());
   }
 
-  // Method to update the book rating
+
   Future<void> updateBookRating(String bookId, String newRating) async {
     try {
       await _db.collection('books').doc(bookId).update({

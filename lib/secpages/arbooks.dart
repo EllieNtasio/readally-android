@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readally/database.dart'; // Make sure your database service is correctly imported
+import 'package:readally/database.dart';
 
 class ARBooksPage extends StatelessWidget {
   const ARBooksPage({super.key});
@@ -23,7 +23,7 @@ class ARBooksPage extends StatelessWidget {
                 color: const Color(0xFFF9EDB2),
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -38,8 +38,8 @@ class ARBooksPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: Color(0xff385723),
                           ),
-                          maxLines: 2,  // Limit to 2 lines
-                          overflow: TextOverflow.ellipsis,  // Handle overflow
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         SizedBox(height: 8),
                         Text(
@@ -55,15 +55,15 @@ class ARBooksPage extends StatelessWidget {
                   ),
                   Image.asset(
                     'assets/images/pana.png',
-                    width: 160,
-                    height: 130,
-                    fit: BoxFit.fitHeight,
+                    width: 180,
+                    height: 120,
+                    fit: BoxFit.cover,
                   ),
                 ],
               ),
             ),
           ),
-          // Fetch and display the list with the ID 'F57etWoaNdSGYQ3RmTAo'
+
           Expanded(
             child: StreamBuilder<List<Map<String, dynamic>>>(
               stream: databaseService.getBooksStreamByListId('F57etWoaNdSGYQ3RmTAo'),
@@ -145,21 +145,21 @@ class BooksListSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // Make this a vertical list instead of horizontal
+
           Expanded(
             child: ListView.builder(
               itemCount: books.length,
               itemBuilder: (context, index) {
                 final book = books[index];
-                final coverUrl = book['cover'];  // Assuming you have a field 'cover' in your book data
-                final title = book['title']; // Assuming you have a field 'title' in your book data
-                final author = book['author']; // Assuming you have a field 'author' in your book data
+                final coverUrl = book['cover'];
+                final title = book['title'];
+                final author = book['author'];
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   child: Row(
                     children: [
-                      // Book cover image
+
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image.network(
@@ -173,7 +173,7 @@ class BooksListSection extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Book title and author next to the cover
+
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
