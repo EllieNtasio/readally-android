@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:readally/components/card.dart';  // Import the BookDetailPage
+import 'package:readally/components/card.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

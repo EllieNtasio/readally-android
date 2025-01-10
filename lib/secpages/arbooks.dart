@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readally/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ARBooksPage extends StatelessWidget {
   const ARBooksPage({super.key});
@@ -63,10 +64,9 @@ class ARBooksPage extends StatelessWidget {
               ),
             ),
           ),
-
           Expanded(
             child: StreamBuilder<List<Map<String, dynamic>>>(
-              stream: databaseService.getBooksStreamByListId('F57etWoaNdSGYQ3RmTAo'),
+              stream: databaseService.getBooksStreamByListId('F57etWoaNdSGYQ3RmTAo'), // Pass the correct listId for 'arbooks'
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -114,6 +114,65 @@ class BooksListSection extends StatelessWidget {
     required this.backgroundColor,
   });
 
+  // Function to show dialog and move book to another list
+  void showMoveToListDialog(BuildContext context, String bookId, String bookTitle) async {
+    // Fetch all lists from Firestore
+    QuerySnapshot listsSnapshot = await FirebaseFirestore.instance.collection('lists').get();
+    List<Map<String, dynamic>> availableLists = listsSnapshot.docs.map((doc) {
+      return {
+        'id': doc.id,
+        'name': doc['listname'],
+      };
+    }).toList();
+
+    // Filter out the 'arbooks' list
+    availableLists = availableLists.where((list) => list['name'] != 'arbooks').toList();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Move "$bookTitle" to a list'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: availableLists.map((listInfo) {
+              return ListTile(
+                title: Text(listInfo['name']),
+                onTap: () async {
+                  DocumentReference listDoc = FirebaseFirestore.instance.collection('lists').doc(listInfo['id']);
+
+                  // Add the book to the selected list
+                  await listDoc.update({
+                    'books': FieldValue.arrayUnion([bookId]),
+                  });
+
+                  // Remove the book from the current list (this assumes the current list is "arbooks")
+                  DocumentReference currentListDoc = FirebaseFirestore.instance.collection('lists').doc('F57etWoaNdSGYQ3RmTAo'); // "arbooks" list id
+                  await currentListDoc.update({
+                    'books': FieldValue.arrayRemove([bookId]),
+                  });
+
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Moved "$bookTitle" to ${listInfo['name']}')),
+                  );
+                },
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -145,7 +204,6 @@ class BooksListSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-
           Expanded(
             child: ListView.builder(
               itemCount: books.length,
@@ -154,12 +212,12 @@ class BooksListSection extends StatelessWidget {
                 final coverUrl = book['cover'];
                 final title = book['title'];
                 final author = book['author'];
+                final bookId = book['id'];
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   child: Row(
                     children: [
-
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image.network(
@@ -173,7 +231,6 @@ class BooksListSection extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 16),
-
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,6 +254,12 @@ class BooksListSection extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline, color: Colors.grey),
+                        onPressed: () {
+                          showMoveToListDialog(context, bookId, title);
+                        },
                       ),
                     ],
                   ),

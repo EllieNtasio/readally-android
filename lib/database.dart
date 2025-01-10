@@ -24,7 +24,7 @@ class DatabaseService {
     return booksList;
   }
 
-
+  // Stream to fetch books by their references
   Stream<List<Map<String, dynamic>>> getBooksStream(List<dynamic> bookRefs) {
     // Check if bookRefs is null or empty and return an empty list
     if (bookRefs == null || bookRefs.isEmpty) {
@@ -44,6 +44,19 @@ class DatabaseService {
           'rate': doc['rate'],
           'summ': doc['summ'],
           'author': doc['author'],
+        };
+      }).toList();
+    });
+  }
+  Stream<List<Map<String, dynamic>>> getAllListsExcept(String excludeListId) {
+    return _db.collection('lists').snapshots().map((snapshot) {
+      return snapshot.docs
+          .where((doc) => doc.id != excludeListId)  // Filter out the list with the excludeListId
+          .map((doc) {
+        return {
+          'id': doc.id,
+          'listname': doc['listname'],  // The name of the list
+          'books': doc['books'] ?? [],  // List of book IDs (array of strings)
         };
       }).toList();
     });
@@ -100,6 +113,21 @@ class DatabaseService {
       print('Rating updated successfully!');
     } catch (e) {
       print('Error updating rating: $e');
+    }
+  }
+
+  // Add a book to a list
+  Future<void> addBookToList(String listId, String bookId) async {
+    try {
+      DocumentReference listRef = _db.collection('lists').doc(listId);
+
+      // Add the bookId to the 'books' array field in the specified list
+      await listRef.update({
+        'books': FieldValue.arrayUnion([bookId]),
+      });
+      print('Book added to the list successfully.');
+    } catch (e) {
+      print('Error adding book to list: $e');
     }
   }
 
