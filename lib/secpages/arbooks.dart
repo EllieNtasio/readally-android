@@ -11,7 +11,7 @@ class ARBooksPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
+        title: const Text('Arbooks List'),
         backgroundColor: const Color(0xffFFFAF5),
       ),
       backgroundColor: const Color(0xffFFFAF5),
@@ -66,7 +66,7 @@ class ARBooksPage extends StatelessWidget {
           ),
           Expanded(
             child: StreamBuilder<List<Map<String, dynamic>>>(
-              stream: databaseService.getBooksStreamByListId('F57etWoaNdSGYQ3RmTAo'), // Pass the correct listId for 'arbooks'
+              stream: databaseService.getBooksStreamByListId('F57etWoaNdSGYQ3RmTAo'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -114,7 +114,7 @@ class BooksListSection extends StatelessWidget {
     required this.backgroundColor,
   });
 
-  // Function to show dialog and move book to another list
+
   void showMoveToListDialog(BuildContext context, String bookId, String bookTitle) async {
     // Fetch all lists from Firestore
     QuerySnapshot listsSnapshot = await FirebaseFirestore.instance.collection('lists').get();
@@ -125,7 +125,7 @@ class BooksListSection extends StatelessWidget {
       };
     }).toList();
 
-    // Filter out the 'arbooks' list
+
     availableLists = availableLists.where((list) => list['name'] != 'arbooks').toList();
 
     showDialog(
@@ -141,12 +141,12 @@ class BooksListSection extends StatelessWidget {
                 onTap: () async {
                   DocumentReference listDoc = FirebaseFirestore.instance.collection('lists').doc(listInfo['id']);
 
-                  // Add the book to the selected list
+
                   await listDoc.update({
                     'books': FieldValue.arrayUnion([bookId]),
                   });
 
-                  // Remove the book from the current list (this assumes the current list is "arbooks")
+
                   DocumentReference currentListDoc = FirebaseFirestore.instance.collection('lists').doc('F57etWoaNdSGYQ3RmTAo'); // "arbooks" list id
                   await currentListDoc.update({
                     'books': FieldValue.arrayRemove([bookId]),
