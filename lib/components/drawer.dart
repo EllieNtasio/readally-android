@@ -159,14 +159,14 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
             Positioned(
-              bottom: -55,
-              left: 100,
+              bottom: -35,
+              left: 130,
               right: 0,
               child: Center(
                 child: Image.asset(
                   'assets/images/bro.png',
-                  width: 200,
-                  height: 200,
+                  width: 100,
+                  height: 100,
                 ),
               ),
             ),

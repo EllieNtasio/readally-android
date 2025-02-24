@@ -29,6 +29,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<int> _getBooksCountFromLists() async {
+
+    var querySnapshot = await FirebaseFirestore.instance.collection('lists').get();
+
+    int totalBooks = 0;
+    for (var doc in querySnapshot.docs) {
+      List<dynamic> booksInList = doc.data()['books'];
+
+
+      if (booksInList != null && booksInList is List) {
+        totalBooks += booksInList.length;
+      }
+    }
+
+    return totalBooks;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           FutureBuilder<int>(
-                            future: _getBooksCount(),
+                            future: _getBooksCountFromLists(),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
                                 return CircularProgressIndicator();
@@ -338,11 +355,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<int> _getListsCount() async {
     var querySnapshot = await FirebaseFirestore.instance.collection('lists').get();
-    return querySnapshot.size;
-  }
-
-  Future<int> _getBooksCount() async {
-    var querySnapshot = await FirebaseFirestore.instance.collection('books').get();
     return querySnapshot.size;
   }
 }

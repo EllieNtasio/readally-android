@@ -76,9 +76,9 @@ class BooksPage extends StatelessWidget {
                     ],
                   ),
                   Image.asset(
-                    'assets/images/flowers.png',
-                    width: 70,
-                    height: 70,
+                    'assets/images/cuate.png',
+                    width: 90,
+                    height: 90,
                     fit: BoxFit.cover,
                   ),
                 ],
